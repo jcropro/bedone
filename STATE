@@ -1,0 +1,21 @@
+CURRENT_MILESTONE: M0 – Environment & Design System Scaffolding
+NEXT_TASK_ID: T-0004
+BLOCKERS: Android SDK not installed in container; Gradle assemble/test commands fail.
+
+LAST_COMPLETED_TASK: T-0003a
+
+PROGRESS LOG
+* [x] T-0003a – Stabilize EmberTheme compile — owner: Codex
+  - Replaced the Material3 Brightness dependency with an internal brightness enum and rebuilt the seed-generated color scheme so Compose 2025.06.00 compiles cleanly.
+  - Switched the application theme parent to AppCompat DayNight and added the AndroidX AppCompat dependency so Android Studio can resolve the base style.
+
+* [x] T-0003 – Typography + spacing scales — owner: Codex
+  - Added Inter font assets, semantic typography tokens, spacing rhythm locals, and Compose previews to visualize the ramp.
+  - MaterialTheme now sources the Ember typography + spacing locals so downstream surfaces inherit the molten cadence.
+
+* [x] T-0002 — EmberTheme scaffolding with semantic tokens — owner: Codex
+  - Added the `:core-ui` module with Compose primitives, semantic color tokens, and a palette ramp demo preview derived from the Ember presets.
+  - TODO follow-up: add screenshot automation once SDK is available.
+
+* [~] T-0001 — Repo init, modules, CI, precommit hooks — owner: Codex
+  - Base Gradle setup exists, but CI pipelines, README badges, and pre-commit automation still need wiring.

@@ -1,0 +1,12 @@
+Build Proof — 2025-09-27T20:00:00Z
+
+Gates: :core-ui:compileDebugKotlin, :app:assembleDebug, :app:compileReleaseKotlin, :app:testDebugUnitTest — SUCCESS
+
+Changes:
+- Scan & Import: added SAF folder management UI (list/add/remove) and rescan
+- Mini-player: switched Next/Previous to AutoMirrored arrow icons for RTL mirroring
+- PlaybackService: new MediaSessionService hosting the session + notification; ViewModel exposes Player via PlaybackEngine; Activity now delegates session/notification to service
+- Main controls now driven via MediaController (play/pause/seek/next/prev) with fallback to ViewModel
+- Video overlay: compact play/pause and mute/unmute under embedded video; added small scrub with elapsed/remaining
+- Tests: await service session; new MediaControllerSpeedTest for playback speed controls
+- Preflight provisioned Android SDK cmdline-tools and installed platform-tools, platforms;android-35, build-tools;35.0.0

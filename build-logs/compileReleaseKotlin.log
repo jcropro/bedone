@@ -1,0 +1,320 @@
+Initialized native services in: /home/jcron/.gradle/native
+Initialized jansi services in: /home/jcron/.gradle/native
+The client will now receive all logging from the daemon (pid: 5321). The daemon log file: /home/jcron/.gradle/daemon/8.13/daemon-5321.out.log
+Starting 35th build in daemon [uptime: 9 hrs 22 mins 51.816 secs, performance: 100%, GC rate: 0.00/s, heap usage: 0% of 2 GiB, non-heap usage: 52% of 512 MiB]
+Using 16 worker leases.
+Now considering [/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3] as hierarchies to watch
+Watching the file system is configured to be enabled
+File system watching is active
+Starting Build
+Settings evaluated using settings file '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/settings.gradle.kts'.
+Using local directory build cache for the root build (location = /home/jcron/.gradle/caches/build-cache-1, remove unused entries = after 7 days).
+Projects loaded. Root project using build file '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/build.gradle.kts'.
+Included projects: [root project 'EmberAudioStudio3', project ':app', project ':core-ui']
+
+> Configure project :
+Evaluating root project 'EmberAudioStudio3' using build file '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/build.gradle.kts'.
+Resolved plugin [id: 'com.android.application', version: '8.12.0', apply: false]
+Resolved plugin [id: 'org.jetbrains.kotlin.android', version: '2.1.20', apply: false]
+Resolved plugin [id: 'org.jetbrains.kotlin.plugin.compose', version: '2.1.20', apply: false]
+Resolved plugin [id: 'io.gitlab.arturbosch.detekt', version: '1.23.8']
+Resolved plugin [id: 'org.jlleitschuh.gradle.ktlint', version: '13.1.0']
+
+> Configure project :app
+Evaluating project ':app' using build file '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/build.gradle.kts'.
+Resolved plugin [id: 'com.android.application']
+Resolved plugin [id: 'org.jetbrains.kotlin.android']
+Resolved plugin [id: 'org.jetbrains.kotlin.plugin.compose']
+Using default execution profile
+Build d4f2a1d9-cb63-4112-96e4-d80eab3a834a is started
+Using Kotlin Gradle Plugin gradle85 variant
+Detected Android Gradle Plugin compose compiler configuration
+Detected Android Gradle Plugin compose compiler configuration
+Detected Android Gradle Plugin compose compiler configuration
+Detected Android Gradle Plugin compose compiler configuration
+Detected Android Gradle Plugin compose compiler configuration
+
+> Configure project :core-ui
+Evaluating project ':core-ui' using build file '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/core-ui/build.gradle.kts'.
+Resolved plugin [id: 'com.android.library']
+Resolved plugin [id: 'org.jetbrains.kotlin.android']
+Resolved plugin [id: 'org.jetbrains.kotlin.plugin.compose']
+Using default execution profile
+Using Kotlin Gradle Plugin gradle85 variant
+Detected Android Gradle Plugin compose compiler configuration
+Detected Android Gradle Plugin compose compiler configuration
+Detected Android Gradle Plugin compose compiler configuration
+Detected Android Gradle Plugin compose compiler configuration
+Detected Android Gradle Plugin compose compiler configuration
+All projects evaluated.
+Task path ':app:compileReleaseKotlin' matched project ':app'
+Task name matched 'compileReleaseKotlin'
+Selected primary task 'compileReleaseKotlin' from project :app
+Tasks to be executed: [task ':app:checkKotlinGradlePluginConfigurationErrors', task ':app:preBuild', task ':app:preReleaseBuild', task ':core-ui:preBuild', task ':core-ui:preReleaseBuild', task ':core-ui:writeReleaseAarMetadata', task ':app:checkReleaseAarMetadata', task ':app:generateReleaseResValues', task ':core-ui:generateReleaseResValues', task ':core-ui:generateReleaseResources', task ':core-ui:packageReleaseResources', task ':app:mapReleaseSourceSetPaths', task ':app:generateReleaseResources', task ':app:mergeReleaseResources', task ':app:packageReleaseResources', task ':app:parseReleaseLocalResources', task ':app:createReleaseCompatibleScreenManifests', task ':app:extractDeepLinksRelease', task ':core-ui:extractDeepLinksRelease', task ':core-ui:processReleaseManifest', task ':app:processReleaseMainManifest', task ':app:processReleaseManifest', task ':app:processReleaseManifestForPackage', task ':core-ui:compileReleaseLibraryResources', task ':core-ui:parseReleaseLocalResources', task ':core-ui:generateReleaseRFile', task ':app:processReleaseResources', task ':core-ui:checkKotlinGradlePluginConfigurationErrors', task ':core-ui:compileReleaseKotlin', task ':core-ui:javaPreCompileRelease', task ':core-ui:compileReleaseJavaWithJavac', task ':core-ui:bundleLibCompileToJarRelease', task ':app:compileReleaseKotlin']
+Tasks that were excluded: []
+Resolve mutations for :app:checkKotlinGradlePluginConfigurationErrors (Thread[Execution worker,5,main]) started.
+Resolve mutations for :core-ui:preBuild (Thread[Execution worker Thread 2,5,main]) started.
+:app:checkKotlinGradlePluginConfigurationErrors (Thread[Execution worker,5,main]) started.
+:core-ui:preBuild (Thread[Execution worker Thread 2,5,main]) started.
+
+> Task :core-ui:preBuild UP-TO-DATE
+Skipping task ':core-ui:preBuild' as it has no actions.
+
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+Skipping task ':app:checkKotlinGradlePluginConfigurationErrors' as task onlyIf 'errorDiagnostics are present' is false.
+Resolve mutations for :app:preBuild (Thread[Execution worker,5,main]) started.
+:app:preBuild (Thread[Execution worker,5,main]) started.
+
+> Task :app:preBuild UP-TO-DATE
+Skipping task ':app:preBuild' as it has no actions.
+Resolve mutations for :app:preReleaseBuild (Thread[Execution worker,5,main]) started.
+Resolve mutations for :core-ui:preReleaseBuild (Thread[Execution worker Thread 2,5,main]) started.
+:core-ui:preReleaseBuild (Thread[Execution worker Thread 2,5,main]) started.
+
+> Task :core-ui:preReleaseBuild UP-TO-DATE
+Skipping task ':core-ui:preReleaseBuild' as it has no actions.
+:app:preReleaseBuild (Thread[Execution worker,5,main]) started.
+
+> Task :app:preReleaseBuild UP-TO-DATE
+Skipping task ':app:preReleaseBuild' as it has no actions.
+Resolve mutations for :app:generateReleaseResValues (Thread[Execution worker,5,main]) started.
+:app:generateReleaseResValues (Thread[Execution worker Thread 5,5,main]) started.
+Resolve mutations for :core-ui:writeReleaseAarMetadata (Thread[Execution worker Thread 2,5,main]) started.
+:core-ui:writeReleaseAarMetadata (Thread[Execution worker Thread 2,5,main]) started.
+
+> Task :app:generateReleaseResValues UP-TO-DATE
+Build cache key for task ':app:generateReleaseResValues' is 31daebee080109d829fe7cfd5060f00d
+Skipping task ':app:generateReleaseResValues' as it is up-to-date.
+Resolve mutations for :app:generateReleaseResources (Thread[Execution worker Thread 5,5,main]) started.
+:app:generateReleaseResources (Thread[Execution worker Thread 5,5,main]) started.
+
+> Task :core-ui:writeReleaseAarMetadata UP-TO-DATE
+Caching disabled for task ':core-ui:writeReleaseAarMetadata' because:
+  Caching has been disabled for the task
+Skipping task ':core-ui:writeReleaseAarMetadata' as it is up-to-date.
+work action resolve aar-metadata.properties (project :core-ui) (Thread[Execution worker Thread 2,5,main]) started.
+Resolve mutations for :core-ui:generateReleaseResValues (Thread[Execution worker Thread 2,5,main]) started.
+:core-ui:generateReleaseResValues (Thread[Execution worker Thread 2,5,main]) started.
+
+> Task :core-ui:generateReleaseResValues UP-TO-DATE
+Build cache key for task ':core-ui:generateReleaseResValues' is 31daebee080109d829fe7cfd5060f00d
+Skipping task ':core-ui:generateReleaseResValues' as it is up-to-date.
+Resolve mutations for :core-ui:generateReleaseResources (Thread[Execution worker Thread 2,5,main]) started.
+
+> Task :app:generateReleaseResources UP-TO-DATE
+Build cache key for task ':app:generateReleaseResources' is 6743fb89fa0a62f1a093789ea7f46e84
+Skipping task ':app:generateReleaseResources' as it is up-to-date.
+:core-ui:generateReleaseResources (Thread[Execution worker Thread 2,5,main]) started.
+Resolve mutations for :app:checkReleaseAarMetadata (Thread[Execution worker Thread 5,5,main]) started.
+:app:checkReleaseAarMetadata (Thread[Execution worker Thread 5,5,main]) started.
+
+> Task :core-ui:generateReleaseResources UP-TO-DATE
+Build cache key for task ':core-ui:generateReleaseResources' is e46000adcf74676c8ea90eb666239eab
+Skipping task ':core-ui:generateReleaseResources' as it is up-to-date.
+Resolve mutations for :core-ui:packageReleaseResources (Thread[Execution worker Thread 2,5,main]) started.
+:core-ui:packageReleaseResources (Thread[Execution worker Thread 2,5,main]) started.
+
+> Task :app:checkReleaseAarMetadata UP-TO-DATE
+Caching disabled for task ':app:checkReleaseAarMetadata' because:
+  Caching has been disabled for the task
+Skipping task ':app:checkReleaseAarMetadata' as it is up-to-date.
+Resolve mutations for :app:packageReleaseResources (Thread[Execution worker Thread 5,5,main]) started.
+:app:packageReleaseResources (Thread[Execution worker Thread 5,5,main]) started.
+
+> Task :core-ui:packageReleaseResources UP-TO-DATE
+Build cache key for task ':core-ui:packageReleaseResources' is e23f7fd70b639dcb49f985ea3feaa4cb
+Skipping task ':core-ui:packageReleaseResources' as it is up-to-date.
+work action resolve packageReleaseResources (project :core-ui) (Thread[Execution worker Thread 2,5,main]) started.
+Resolve mutations for :core-ui:extractDeepLinksRelease (Thread[Execution worker Thread 2,5,main]) started.
+:core-ui:extractDeepLinksRelease (Thread[Execution worker Thread 7,5,main]) started.
+
+> Task :core-ui:extractDeepLinksRelease UP-TO-DATE
+Build cache key for task ':core-ui:extractDeepLinksRelease' is 378c927f9f5ac10d1ea9c02c3441b8e4
+Skipping task ':core-ui:extractDeepLinksRelease' as it is up-to-date.
+work action resolve navigation.json (project :core-ui) (Thread[Execution worker Thread 7,5,main]) started.
+Resolve mutations for :core-ui:processReleaseManifest (Thread[Execution worker Thread 7,5,main]) started.
+:core-ui:processReleaseManifest (Thread[Execution worker Thread 7,5,main]) started.
+
+> Task :app:packageReleaseResources UP-TO-DATE
+Build cache key for task ':app:packageReleaseResources' is 01f052f29e4dfe0f19ff9d6e791b6579
+Skipping task ':app:packageReleaseResources' as it is up-to-date.
+Resolve mutations for :app:mapReleaseSourceSetPaths (Thread[Execution worker Thread 5,5,main]) started.
+:app:mapReleaseSourceSetPaths (Thread[Execution worker Thread 5,5,main]) started.
+
+> Task :app:mapReleaseSourceSetPaths UP-TO-DATE
+Caching disabled for task ':app:mapReleaseSourceSetPaths' because:
+  Caching has been disabled for the task
+Skipping task ':app:mapReleaseSourceSetPaths' as it is up-to-date.
+Resolve mutations for :app:mergeReleaseResources (Thread[Execution worker Thread 5,5,main]) started.
+:app:mergeReleaseResources (Thread[Execution worker Thread 5,5,main]) started.
+
+> Task :core-ui:processReleaseManifest UP-TO-DATE
+Build cache key for task ':core-ui:processReleaseManifest' is e4e44d73a1b2bdce4a529a936287e7c4
+Skipping task ':core-ui:processReleaseManifest' as it is up-to-date.
+work action resolve AndroidManifest.xml (project :core-ui) (Thread[Execution worker Thread 7,5,main]) started.
+Resolve mutations for :core-ui:compileReleaseLibraryResources (Thread[Execution worker Thread 7,5,main]) started.
+:core-ui:compileReleaseLibraryResources (Thread[Execution worker Thread 7,5,main]) started.
+
+> Task :core-ui:compileReleaseLibraryResources UP-TO-DATE
+Build cache key for task ':core-ui:compileReleaseLibraryResources' is 8d9cc8721699f61bb93d8d2fc62be7f6
+Skipping task ':core-ui:compileReleaseLibraryResources' as it is up-to-date.
+work action resolve out (project :core-ui) (Thread[Execution worker Thread 7,5,main]) started.
+Resolve mutations for :core-ui:parseReleaseLocalResources (Thread[Execution worker Thread 7,5,main]) started.
+:core-ui:parseReleaseLocalResources (Thread[Execution worker Thread 13,5,main]) started.
+
+> Task :core-ui:parseReleaseLocalResources UP-TO-DATE
+Build cache key for task ':core-ui:parseReleaseLocalResources' is ea715f6226d95ba94cde56cda1ea6b2c
+Skipping task ':core-ui:parseReleaseLocalResources' as it is up-to-date.
+Resolve mutations for :core-ui:generateReleaseRFile (Thread[Execution worker Thread 13,5,main]) started.
+:core-ui:generateReleaseRFile (Thread[Execution worker Thread 13,5,main]) started.
+
+> Task :app:mergeReleaseResources UP-TO-DATE
+Build cache key for task ':app:mergeReleaseResources' is 19ea45f3d4e16867d62d852dd37cd5bd
+Skipping task ':app:mergeReleaseResources' as it is up-to-date.
+Resolve mutations for :app:parseReleaseLocalResources (Thread[Execution worker Thread 5,5,main]) started.
+:app:parseReleaseLocalResources (Thread[Execution worker Thread 5,5,main]) started.
+
+> Task :app:parseReleaseLocalResources UP-TO-DATE
+Build cache key for task ':app:parseReleaseLocalResources' is 4cdf177d841ad0c8487410b311dc8bf7
+Skipping task ':app:parseReleaseLocalResources' as it is up-to-date.
+Resolve mutations for :app:createReleaseCompatibleScreenManifests (Thread[Execution worker Thread 5,5,main]) started.
+:app:createReleaseCompatibleScreenManifests (Thread[Execution worker Thread 5,5,main]) started.
+
+> Task :core-ui:generateReleaseRFile UP-TO-DATE
+Build cache key for task ':core-ui:generateReleaseRFile' is 16d1e9d6c363604a835c5bf6f8f05f96
+Skipping task ':core-ui:generateReleaseRFile' as it is up-to-date.
+work action resolve package-aware-r.txt (project :core-ui) (Thread[Execution worker Thread 13,5,main]) started.
+Resolve mutations for :core-ui:checkKotlinGradlePluginConfigurationErrors (Thread[Execution worker Thread 13,5,main]) started.
+:core-ui:checkKotlinGradlePluginConfigurationErrors (Thread[Execution worker Thread 13,5,main]) started.
+
+> Task :core-ui:checkKotlinGradlePluginConfigurationErrors SKIPPED
+Skipping task ':core-ui:checkKotlinGradlePluginConfigurationErrors' as task onlyIf 'errorDiagnostics are present' is false.
+Resolve mutations for :core-ui:compileReleaseKotlin (Thread[Execution worker Thread 13,5,main]) started.
+:core-ui:compileReleaseKotlin (Thread[Execution worker Thread 13,5,main]) started.
+
+> Task :app:createReleaseCompatibleScreenManifests UP-TO-DATE
+Caching disabled for task ':app:createReleaseCompatibleScreenManifests' because:
+  Caching has been disabled for the task
+Skipping task ':app:createReleaseCompatibleScreenManifests' as it is up-to-date.
+Resolve mutations for :app:extractDeepLinksRelease (Thread[Execution worker Thread 5,5,main]) started.
+:app:extractDeepLinksRelease (Thread[Execution worker Thread 5,5,main]) started.
+
+> Task :app:extractDeepLinksRelease UP-TO-DATE
+Build cache key for task ':app:extractDeepLinksRelease' is 378c927f9f5ac10d1ea9c02c3441b8e4
+Skipping task ':app:extractDeepLinksRelease' as it is up-to-date.
+Resolve mutations for :app:processReleaseMainManifest (Thread[Execution worker Thread 5,5,main]) started.
+:app:processReleaseMainManifest (Thread[Execution worker Thread 5,5,main]) started.
+
+> Task :app:processReleaseMainManifest UP-TO-DATE
+Build cache key for task ':app:processReleaseMainManifest' is aeff8d5b956ab6359abb045f5549a7ba
+Skipping task ':app:processReleaseMainManifest' as it is up-to-date.
+Resolve mutations for :app:processReleaseManifest (Thread[Execution worker Thread 5,5,main]) started.
+:app:processReleaseManifest (Thread[Execution worker Thread 15,5,main]) started.
+
+> Task :app:processReleaseManifest UP-TO-DATE
+Build cache key for task ':app:processReleaseManifest' is 5c1c64e5faef30e34e32be5d4f981e5b
+Skipping task ':app:processReleaseManifest' as it is up-to-date.
+Resolve mutations for :app:processReleaseManifestForPackage (Thread[Execution worker Thread 15,5,main]) started.
+:app:processReleaseManifestForPackage (Thread[Execution worker Thread 15,5,main]) started.
+
+> Task :app:processReleaseManifestForPackage UP-TO-DATE
+Custom actions are attached to task ':app:processReleaseManifestForPackage'.
+Build cache key for task ':app:processReleaseManifestForPackage' is c9e2e9dffc468685d16510ed6ed7cef5
+Skipping task ':app:processReleaseManifestForPackage' as it is up-to-date.
+Resolve mutations for :app:processReleaseResources (Thread[Execution worker Thread 15,5,main]) started.
+:app:processReleaseResources (Thread[Execution worker Thread 15,5,main]) started.
+
+> Task :app:processReleaseResources UP-TO-DATE
+Build cache key for task ':app:processReleaseResources' is d233c4a7459f52cc49f1ec079d5b9f95
+Skipping task ':app:processReleaseResources' as it is up-to-date.
+
+> Task :core-ui:compileReleaseKotlin UP-TO-DATE
+Adding -Xuse-inline-scopes-numbers Kotlin compiler flag for task :core-ui:compileDebugAndroidTestKotlin
+Build cache key for task ':core-ui:compileReleaseKotlin' is b5735abe1fb5be8319990f443e90ab66
+Skipping task ':core-ui:compileReleaseKotlin' as it is up-to-date.
+Resolve mutations for :core-ui:javaPreCompileRelease (Thread[Execution worker Thread 13,5,main]) started.
+:core-ui:javaPreCompileRelease (Thread[Execution worker Thread 13,5,main]) started.
+
+> Task :core-ui:javaPreCompileRelease UP-TO-DATE
+Build cache key for task ':core-ui:javaPreCompileRelease' is fb8e505ff4943725239893dd2af0da1b
+Skipping task ':core-ui:javaPreCompileRelease' as it is up-to-date.
+Resolve mutations for :core-ui:compileReleaseJavaWithJavac (Thread[Execution worker Thread 13,5,main]) started.
+:core-ui:compileReleaseJavaWithJavac (Thread[Execution worker Thread 13,5,main]) started.
+
+> Task :core-ui:compileReleaseJavaWithJavac NO-SOURCE
+Skipping task ':core-ui:compileReleaseJavaWithJavac' as it has no source files and no previous output files.
+Resolve mutations for :core-ui:bundleLibCompileToJarRelease (Thread[Execution worker Thread 13,5,main]) started.
+:core-ui:bundleLibCompileToJarRelease (Thread[Execution worker Thread 13,5,main]) started.
+
+> Task :core-ui:bundleLibCompileToJarRelease UP-TO-DATE
+Caching disabled for task ':core-ui:bundleLibCompileToJarRelease' because:
+  Simple merging task
+Skipping task ':core-ui:bundleLibCompileToJarRelease' as it is up-to-date.
+work action resolve classes.jar (project :core-ui) (Thread[Execution worker Thread 13,5,main]) started.
+Resolve mutations for :app:compileReleaseKotlin (Thread[Execution worker Thread 13,5,main]) started.
+:app:compileReleaseKotlin (Thread[Execution worker Thread 13,5,main]) started.
+
+> Task :app:compileReleaseKotlin
+Adding -Xuse-inline-scopes-numbers Kotlin compiler flag for task :app:compileDebugAndroidTestKotlin
+Build cache key for task ':app:compileReleaseKotlin' is 29f95cfd4536a71ccc5d302d3f179b36
+Task ':app:compileReleaseKotlin' is not up-to-date because:
+  Task has failed previously.
+The input changes require a full rebuild for incremental task ':app:compileReleaseKotlin'.
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/java', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/java', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/java', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/java', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/java', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/java', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/java', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/java', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/java', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/java', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/java', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/java', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/java', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/java', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/java', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/java', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/java', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/java', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/kotlin', not found
+file or directory '/mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/release/java', not found
+Kotlin source files: /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/androidx/compose/ui/text/input/KeyboardOptionsAlias.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/audio/VirtualizerCompat.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/di/PlayerViewModelProvider.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/EmberAudioPlayerApp.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/equalizer/EqualizerPreferencesRepository.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/library/LibraryCacheRepository.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/library/LibraryRepository.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/library/VideoRepository.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/LibrarySorting.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/LongformHeuristics.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/MainActivity.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/notifications/PlayerNotificationController.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/onboarding/OnboardingPreferencesRepository.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/OnboardingScreens.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/playback/PlaybackPreferencesRepository.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/playback/PlaybackQueueRepository.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/PlaybackSpeed.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/PlayerViewModel.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/SampleLibrary.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/SearchModels.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/sleep/SleepTimerAlarmReceiver.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/sleep/SleepTimerAlarmScheduler.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/sleep/SleepTimerBootReceiver.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/sleep/SleepTimerController.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/sleep/SleepTimerControllerHandle.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/sleep/SleepTimerPreferencesRepository.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/sleep/SleepTimerScheduler.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/SleepTimerScreen.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/theme/ThemePreferencesRepository.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/util/AudioFormat.kt, /mnt/c/Users/jcron/AndroidStudioProjects/EmberAudioPlayer3/app/src/main/java/app/ember/studio/util/TimeFormat.kt
+Java source files: 
+Script source files: 
+Script file extensions: 
+Using Kotlin/JVM incremental compilation
+[KOTLIN] Kotlin compilation 'jdkHome' argument: null
+Finished executing kotlin compiler using IN_PROCESS strategy
+
+> Task :app:compileReleaseKotlin FAILED
+Build d4f2a1d9-cb63-4112-96e4-d80eab3a834a is closed
+26 actionable tasks: 1 executed, 25 up-to-date

@@ -1,0 +1,98 @@
+Calculating task graph as no cached configuration is available for tasks: :app:connectedDebugAndroidTest
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core-ui:preBuild UP-TO-DATE
+> Task :core-ui:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:preBuild UP-TO-DATE
+> Task :core-ui:preDebugBuild UP-TO-DATE
+> Task :app:preDebugAndroidTestBuild SKIPPED
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :core-ui:generateDebugResValues UP-TO-DATE
+> Task :core-ui:mergeDebugShaders UP-TO-DATE
+> Task :core-ui:javaPreCompileDebug UP-TO-DATE
+> Task :core-ui:mergeDebugJniLibFolders UP-TO-DATE
+> Task :core-ui:writeDebugAarMetadata UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:generateDebugResValues UP-TO-DATE
+> Task :core-ui:compileDebugShaders NO-SOURCE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :core-ui:generateDebugAssets UP-TO-DATE
+> Task :app:mergeDebugShaders UP-TO-DATE
+> Task :app:compileDebugShaders NO-SOURCE
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :core-ui:generateDebugResources UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :core-ui:mergeDebugAssets UP-TO-DATE
+> Task :core-ui:extractDeepLinksDebug UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:desugarDebugFileDependencies UP-TO-DATE
+> Task :core-ui:mergeDebugNativeLibs NO-SOURCE
+> Task :app:validateSigningDebug UP-TO-DATE
+> Task :core-ui:processDebugManifest UP-TO-DATE
+> Task :app:mergeDebugJniLibFolders UP-TO-DATE
+> Task :app:writeDebugAppMetadata UP-TO-DATE
+> Task :core-ui:copyDebugJniLibsProjectOnly UP-TO-DATE
+> Task :app:writeDebugSigningConfigVersions UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:mergeDebugAssets UP-TO-DATE
+> Task :app:checkDebugDuplicateClasses UP-TO-DATE
+> Task :app:compressDebugAssets UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :core-ui:packageDebugResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:mergeDebugNativeLibs UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :core-ui:compileDebugLibraryResources UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :core-ui:parseDebugLocalResources UP-TO-DATE
+> Task :app:javaPreCompileDebugAndroidTest FROM-CACHE
+> Task :app:stripDebugDebugSymbols UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:generateDebugAndroidTestResValues FROM-CACHE
+> Task :core-ui:generateDebugRFile UP-TO-DATE
+> Task :app:desugarDebugAndroidTestFileDependencies FROM-CACHE
+> Task :app:writeDebugAndroidTestSigningConfigVersions
+> Task :core-ui:compileDebugKotlin UP-TO-DATE
+> Task :app:validateSigningDebugAndroidTest
+> Task :core-ui:compileDebugJavaWithJavac NO-SOURCE
+> Task :app:mergeDebugAndroidTestShaders
+> Task :core-ui:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :core-ui:processDebugJavaRes UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :core-ui:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :core-ui:bundleLibRuntimeToDirDebug UP-TO-DATE
+> Task :app:compileDebugAndroidTestShaders NO-SOURCE
+> Task :app:generateDebugAndroidTestAssets UP-TO-DATE
+> Task :app:generateDebugAndroidTestResources
+> Task :app:compileDebugKotlin UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac NO-SOURCE
+> Task :app:mergeLibDexDebug UP-TO-DATE
+> Task :app:bundleDebugClassesToCompileJar UP-TO-DATE
+> Task :app:mergeExtDexDebug UP-TO-DATE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:mergeDebugJavaResource UP-TO-DATE
+> Task :app:dexBuilderDebug UP-TO-DATE
+> Task :app:mergeProjectDexDebug UP-TO-DATE
+> Task :app:mergeDebugGlobalSynthetics UP-TO-DATE
+> Task :app:mergeDebugAndroidTestJniLibFolders
+> Task :app:mapDebugAndroidTestSourceSetPaths
+> Task :app:packageDebug UP-TO-DATE
+> Task :app:createDebugApkListingFileRedirect UP-TO-DATE
+> Task :app:checkDebugAndroidTestAarMetadata
+> Task :app:mergeDebugAndroidTestAssets
+> Task :app:processDebugAndroidTestManifest
+> Task :app:mergeDebugAndroidTestNativeLibs NO-SOURCE
+> Task :app:stripDebugAndroidTestDebugSymbols NO-SOURCE
+> Task :app:checkDebugAndroidTestDuplicateClasses
+> Task :app:compressDebugAndroidTestAssets
+> Task :app:mergeLibDexDebugAndroidTest
+> Task :app:mergeDebugAndroidTestResources
+> Task :app:mergeExtDexDebugAndroidTest
+> Task :app:processDebugAndroidTestResources
+
+> Task :app:compileDebugAndroidTestKotlin
+
+> Task :app:compileDebugAndroidTestKotlin FAILED
+74 actionable tasks: 16 executed, 3 from cache, 55 up-to-date
+Configuration cache entry stored.

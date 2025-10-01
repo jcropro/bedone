@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    
+    <!-- Outer glow effect -->
+    <path
+        android:fillColor="#FF7A1A"
+        android:fillAlpha="0.3"
+        android:pathData="M60,20 C75,20 85,30 85,45 C85,50 83,55 80,58 C82,62 85,67 85,72 C85,87 75,97 60,97 C45,97 35,87 35,72 C35,67 38,62 40,58 C37,55 35,50 35,45 C35,30 45,20 60,20 Z" />
+    
+    <!-- Main flame body -->
+    <path
+        android:fillColor="#FF7A1A"
+        android:pathData="M60,25 C70,25 78,33 78,43 C78,47 76,51 73,53 C75,56 78,60 78,65 C78,75 70,83 60,83 C50,83 42,75 42,65 C42,60 45,56 47,53 C44,51 42,47 42,43 C42,33 50,25 60,25 Z" />
+    
+    <!-- Inner flame core -->
+    <path
+        android:fillColor="#FFB84D"
+        android:pathData="M60,30 C67,30 73,36 73,43 C73,46 72,49 70,51 C71,53 73,56 73,60 C73,67 67,73 60,73 C53,73 47,67 47,60 C47,56 49,53 50,51 C48,49 47,46 47,43 C47,36 53,30 60,30 Z" />
+    
+    <!-- Bright center -->
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M60,35 C64,35 68,39 68,43 C68,45 67,47 66,48 C67,49 68,51 68,53 C68,57 64,61 60,61 C56,61 52,57 52,53 C52,51 53,49 54,48 C53,47 52,45 52,43 C52,39 56,35 60,35 Z" />
+    
+    <!-- Sparkle effects -->
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M25,33 C27,33 27,37 25,37 C23,37 23,33 25,33 Z" />
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M95,43.5 C96.5,43.5 96.5,46.5 95,46.5 C93.5,46.5 93.5,43.5 95,43.5 Z" />
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M30,74 C31,74 31,76 30,76 C29,76 29,74 30,74 Z" />
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M90,68 C92,68 92,72 90,72 C88,72 88,68 90,68 Z" />
+</vector>

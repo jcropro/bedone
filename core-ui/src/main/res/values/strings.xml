@@ -1,0 +1,26 @@
+<resources>
+    <string name="theme_option_ember">Ember Classic</string>
+    <string name="theme_option_night">Night Copper</string>
+    <string name="theme_option_graphite">Mono Graphite</string>
+    <string name="preview_typography_title">Typography</string>
+    <string name="preview_spacing_title">Spacing rhythm</string>
+    <string name="preview_style_display">Display / 28sp</string>
+    <string name="preview_style_headline">Headline / 24sp</string>
+    <string name="preview_style_title_large">Title Large / 22sp</string>
+    <string name="preview_style_title">Title / 20sp</string>
+    <string name="preview_style_subtitle">Subtitle / 18sp</string>
+    <string name="preview_style_body_large">Body Large / 18sp</string>
+    <string name="preview_style_body">Body / 16sp</string>
+    <string name="preview_style_body_compact">Body Compact / 15sp</string>
+    <string name="preview_style_caption">Caption / 13sp</string>
+    <string name="preview_style_label">Label / 13sp</string>
+    <string name="preview_sample_text">Molten gradients need breathing room.</string>
+    <string name="preview_spacing_xxs">XXS — 4dp</string>
+    <string name="preview_spacing_xs">XS — 8dp</string>
+    <string name="preview_spacing_sm">SM — 12dp</string>
+    <string name="preview_spacing_md">MD — 16dp</string>
+    <string name="preview_spacing_lg">LG — 20dp</string>
+    <string name="preview_spacing_xl">XL — 24dp</string>
+    <string name="preview_spacing_xxl">XXL — 32dp</string>
+    <string name="preview_spacing_section">Section — 40dp</string>
+</resources>

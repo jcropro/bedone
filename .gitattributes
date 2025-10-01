@@ -1,0 +1,8 @@
+* text=auto eol=lf
+
+# Avoid conflict churn in non-runtime policy/docs
+AGENTS.md merge=ours
+master_prompt.md merge=ours
+docs/STATE.yml merge=ours
+docs/NEXT.md merge=ours
+.github/pull_request_template.md merge=ours

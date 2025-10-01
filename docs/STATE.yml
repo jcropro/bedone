@@ -1,0 +1,52 @@
+# Single source of truth for "where we left off".
+# Update this on every PR.
+
+version: 1
+
+last_successful_build:
+  commit: "local"
+  timestamp: "2025-09-29T00:00:00Z"
+  gradle: "8.13"
+  agp: "8.12.0"
+  jdk: "17"
+  kotlin: "2.1.20"
+  compose_bom: "2025.06.00"
+
+current_workstream:
+  title: "Premium visuals: palette cache + glass controls"
+  rationale: "Improve perceived quality and performance with palette‑driven gradient avatars, cached palette computations off the main thread, a translucent glass control panel, and smoother Now Playing background crossfades."
+  modules_touched:
+    - app
+    - docs
+  files_changed:
+    - app/src/main/java/app/ember/studio/art/ArtworkPaletteCache.kt
+    - app/src/main/java/app/ember/studio/EmberAudioPlayerApp.kt
+    - app/src/main/java/app/ember/studio/SettingsScreen.kt
+    - app/src/main/java/app/ember/studio/PlayerViewModel.kt
+    - app/src/main/java/app/ember/studio/playback/PlaybackPreferencesRepository.kt
+    - app/src/main/java/app/ember/studio/MainActivity.kt
+    - app/src/main/res/values/strings.xml
+    - docs/NEXT.md
+    - docs/STATE.yml
+  invariants_checked:
+    no_local_properties_committed: true
+    local_properties_may_be_generated: true
+    gradle_properties_present: true
+    manifest_permissions_declared: true
+
+  next_actions:
+  - "Now Playing background smoke test for palette change between tracks (tolerate missing art)."
+  - "Share flow tests: confirm content URIs + persisted grants; text fallback when no stream."
+  - "Crossfade polish: capability gating + instrumentation hooks for fade-out/in validation."
+
+  notes:
+    - "Scan & Import: added SAF folder management UI (list/add/remove) and rescan; wired to FolderImportRepository and PlayerViewModel."
+    - "Mini-player: switched Next/Previous to AutoMirrored arrow icons for RTL correctness."
+    - "PlaybackService hosts MediaSession + notification; ViewModel publishes player via PlaybackEngine; Activity defers to service."
+    - "Media3 device tests updated to await service-backed session via test util; added controller speed test; unit tests and assemble remain green."
+    - "Preflight provisioned SDK cmdline-tools into HOME and installed required packages; gates are green (assembleDebug + compileReleaseKotlin)."
+    - "Palette cache: in-memory LRU for dominant/vibrant colors keyed by media/album/artist; IO-only compute; integrated into Songs/Albums/Artists gradient avatars with animated color changes."
+    - "Now Playing: translucent glass control panel with rounded 48dp, inner-shadow gradient overlay, central play/pause; haptics toggle in Settings with DataStore persistence guards feedback calls."
+    - "Background: smoother animated gradient crossfades between tracks using updateTransition across multiple stops; video path unchanged."
+    - "Playlist import: robust MediaStore/URI matching implemented with user feedback via global status messages."
+    - "Build proof: assembleDebug, compileReleaseKotlin, and unit tests are green; added build-logs/BUILD-PROOF-2025-09-28.md."

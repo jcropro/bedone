@@ -1,0 +1,35 @@
+#!/bin/sh
+#
+# Pre-commit hook for Ember Audio Player
+# Runs quality gates before allowing commits
+#
+
+echo "🔥 Running Ember quality gates..."
+
+# Run ktlint check
+echo "📝 Running ktlint check..."
+./gradlew ktlintCheck
+if [ $? -ne 0 ]; then
+    echo "❌ ktlint check failed. Please fix the issues above."
+    exit 1
+fi
+
+# Run detekt
+echo "🔍 Running detekt static analysis..."
+./gradlew detekt
+if [ $? -ne 0 ]; then
+    echo "❌ detekt check failed. Please fix the issues above."
+    exit 1
+fi
+
+# Run Android lint
+echo "🚨 Running Android lint..."
+./gradlew :app:lintDebug
+if [ $? -ne 0 ]; then
+    echo "❌ Android lint check failed. Please fix the issues above."
+    echo "💡 Remember: UnsafeOptInUsageError must be fixed, not baselined."
+    exit 1
+fi
+
+echo "✅ All quality gates passed! Commit allowed."
+exit 0

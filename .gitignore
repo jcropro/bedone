@@ -1,0 +1,14 @@
+# Android .gitignore 
+*.iml 
+.gradle/ 
+.idea/ 
+local.properties 
+**/build/ 
+build/ 
+app/build/ 
+core-ui/build/ 
+.cxx/ 
+.externalNativeBuild/ 
+captures/ 
+*.apk 
+*.aab 

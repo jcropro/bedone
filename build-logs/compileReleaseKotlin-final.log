@@ -1,0 +1,36 @@
+> Task :core-ui:preBuild UP-TO-DATE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core-ui:preReleaseBuild UP-TO-DATE
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preReleaseBuild UP-TO-DATE
+> Task :core-ui:writeReleaseAarMetadata
+> Task :app:generateReleaseResValues
+> Task :core-ui:generateReleaseResValues
+> Task :app:generateReleaseResources
+> Task :core-ui:generateReleaseResources
+> Task :app:checkReleaseAarMetadata
+> Task :core-ui:packageReleaseResources
+> Task :app:packageReleaseResources
+> Task :app:mapReleaseSourceSetPaths
+> Task :core-ui:extractDeepLinksRelease
+> Task :core-ui:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core-ui:processReleaseManifest
+> Task :core-ui:parseReleaseLocalResources
+> Task :core-ui:javaPreCompileRelease
+> Task :core-ui:compileReleaseLibraryResources
+> Task :core-ui:generateReleaseRFile
+> Task :core-ui:compileReleaseKotlin
+> Task :core-ui:compileReleaseJavaWithJavac NO-SOURCE
+> Task :core-ui:bundleLibCompileToJarRelease
+> Task :app:createReleaseCompatibleScreenManifests
+> Task :app:extractDeepLinksRelease
+> Task :app:parseReleaseLocalResources
+> Task :app:processReleaseMainManifest
+> Task :app:processReleaseManifest
+> Task :app:processReleaseManifestForPackage
+> Task :app:mergeReleaseResources
+> Task :app:processReleaseResources
+> Task :app:compileReleaseKotlin
+
+BUILD SUCCESSFUL in 54s
+26 actionable tasks: 26 executed
