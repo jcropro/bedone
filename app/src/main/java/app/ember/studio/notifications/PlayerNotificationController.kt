@@ -51,7 +51,7 @@ class PlayerNotificationController(
 
         val builder = NotificationAdapters.createNotificationManagerBuilder(context, notificationId, channelId)
         NotificationAdapters.setMediaDescriptionAdapter(builder, descriptionAdapter)
-        NotificationAdapters.setSmallIconResourceId(builder, R.drawable.ember_logo)
+        NotificationAdapters.setSmallIconResourceId(builder, R.drawable.ic_ember_logo)
         val m = NotificationAdapters.buildNotificationManager(builder)
         // Core transport actions
         NotificationAdapters.setUsePlayPauseActions(m, true)

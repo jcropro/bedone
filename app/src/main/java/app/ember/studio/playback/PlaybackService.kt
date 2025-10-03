@@ -70,7 +70,7 @@ class PlaybackService : MediaSessionService() {
             val notification: Notification = Notification.Builder(this, DEFAULT_CHANNEL_ID)
                 .setContentTitle(getString(R.string.notification_title_playback))
                 .setContentText("")
-                .setSmallIcon(app.ember.studio.R.drawable.ember_logo)
+                .setSmallIcon(app.ember.studio.R.drawable.ic_ember_logo)
                 .setOngoing(true)
                 .build()
             try {
