@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.annotation.OptIn as AndroidOptIn
@@ -105,6 +106,14 @@ class MainActivity : ComponentActivity() {
                     playerViewModel.onFolderSelected(uri)
                 } else {
                     playerViewModel.onFolderSelectionCancelled()
+                }
+            }
+
+            // Auto-open folder picker when permission is denied
+            LaunchedEffect(onboardingState.permissionState.shouldOpenFolderPicker) {
+                if (onboardingState.permissionState.shouldOpenFolderPicker) {
+                    playerViewModel.onFolderPickerOpened()
+                    folderLauncher.launch(null)
                 }
             }
 

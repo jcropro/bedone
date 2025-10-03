@@ -1609,6 +1609,14 @@ class PlayerViewModel(
         }
     }
 
+    fun onFolderPickerOpened() {
+        _onboardingState.update { state ->
+            state.copy(
+                permissionState = state.permissionState.copy(shouldOpenFolderPicker = false)
+            )
+        }
+    }
+
     fun onInitialPermissionGranted() {
         triggerInitialScan()
     }
@@ -1621,7 +1629,8 @@ class PlayerViewModel(
                 state.copy(
                     permissionState = state.permissionState.copy(
                         errorMessage = appContext.getString(R.string.onboarding_permission_error),
-                        isPermissionGranted = false
+                        isPermissionGranted = false,
+                        shouldOpenFolderPicker = true // Auto-open folder picker when permission denied
                     )
                 )
             }
@@ -1638,7 +1647,8 @@ class PlayerViewModel(
                 permissionState = state.permissionState.copy(
                     isPermissionGranted = true,
                     selectedFolderCount = state.permissionState.selectedFolderCount + 1,
-                    errorMessage = null
+                    errorMessage = null,
+                    shouldOpenFolderPicker = false // Clear the flag when folder is selected
                 )
             )
         }
@@ -2795,7 +2805,8 @@ data class PermissionStepState(
     val isScanning: Boolean = false,
     val scannedItemCount: Int = 0,
     val totalItemCount: Int = 0,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val shouldOpenFolderPicker: Boolean = false
 )
 
 data class LongformStepState(
