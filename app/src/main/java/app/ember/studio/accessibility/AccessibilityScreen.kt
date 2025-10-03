@@ -313,7 +313,7 @@ private fun AudioAccessibilitySection(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    imageVector = Icons.Filled.VolumeUp,
+                    imageVector = Icons.AutoMirrored.Filled.VolumeUp,
                     contentDescription = "Audio",
                     tint = EmberFlame,
                     modifier = Modifier.size(20.dp)

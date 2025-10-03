@@ -268,7 +268,7 @@ private fun SmartPlaylistRules(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.Rule,
+                        imageVector = Icons.AutoMirrored.Filled.Rule,
                         contentDescription = "No Rules",
                         tint = TextMuted,
                         modifier = Modifier.size(48.dp)

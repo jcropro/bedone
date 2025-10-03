@@ -58,7 +58,9 @@ import app.ember.core.ui.design.EmberFlame
 import app.ember.core.ui.design.TextMuted
 import app.ember.core.ui.design.TextStrong
 import app.ember.core.ui.theme.EmberTheme
-import app.ember.studio.navigation.LibraryTab
+import app.ember.studio.LibraryTab
+import app.ember.core.ui.components.AlbumsEmptyState
+import app.ember.core.ui.components.AlbumGridSkeleton
 import app.ember.studio.feature.songs.SortDirection
 
 // Data classes
@@ -211,17 +213,15 @@ fun AlbumsScreen(
 
             // Albums Content
             if (isLoading) {
-                Box(
+                AlbumGridSkeleton(
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(
-                        color = EmberFlame
-                    )
-                }
+                    itemCount = 12
+                )
             } else if (albums.isEmpty()) {
-                EmptyAlbumsState(
-                    modifier = Modifier.fillMaxSize()
+                AlbumsEmptyState(
+                    modifier = Modifier.fillMaxSize(),
+                    onScanLibrary = { /* TODO: Implement scan library */ },
+                    onImportMusic = { /* TODO: Implement import music */ }
                 )
             } else {
                 when (viewMode) {
@@ -522,37 +522,6 @@ private fun AlbumListCard(
     }
 }
 
-@Composable
-private fun EmptyAlbumsState(
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier.padding(32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Icon(
-            imageVector = Icons.Filled.PlayArrow,
-            contentDescription = null,
-            tint = TextMuted,
-            modifier = Modifier.size(64.dp)
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "No Albums Found",
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Medium,
-            color = TextStrong
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Albums will appear here once you scan your music library",
-            style = MaterialTheme.typography.bodyMedium,
-            color = TextMuted,
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center
-        )
-    }
-}
 
 @Composable
 private fun AlbumFilterChips(

@@ -74,11 +74,6 @@ class MainActivity : ComponentActivity() {
         // TODO: Remove temporary bypass once onboarding state management is verified
 
         setContent {
-            var showIgnite by rememberSaveable { mutableStateOf(true) }
-            
-            if (showIgnite) {
-                app.ember.studio.ui.IgniteOverlay(onFinished = { showIgnite = false })
-            }
             
             val homeState by playerViewModel.homeState.collectAsStateWithLifecycle()
             val playerState by playerViewModel.uiState.collectAsStateWithLifecycle()

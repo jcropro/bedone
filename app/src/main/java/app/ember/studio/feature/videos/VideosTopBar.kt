@@ -56,7 +56,7 @@ import app.ember.core.ui.design.EmberFlame
 import app.ember.core.ui.design.TextMuted
 import app.ember.core.ui.design.TextStrong
 import app.ember.core.ui.theme.EmberTheme
-import app.ember.studio.navigation.LibraryTab
+import app.ember.studio.LibraryTab
 import app.ember.studio.feature.songs.SortDirection
 
 /**

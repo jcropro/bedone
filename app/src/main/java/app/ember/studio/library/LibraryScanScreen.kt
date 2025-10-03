@@ -210,7 +210,7 @@ private fun LibraryScanProgress(
             
             // Progress bar
             LinearProgressIndicator(
-                progress = animatedProgress,
+                progress = { animatedProgress },
                 modifier = Modifier.fillMaxWidth(),
                 color = EmberFlame,
                 trackColor = EmberOutline.copy(alpha = 0.3f)
@@ -455,7 +455,7 @@ private fun LibraryScanActions(
                 onClick = onCreateSmartPlaylist,
                 modifier = Modifier.weight(1f),
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = EmberFlame),
-                border = ButtonDefaults.outlinedButtonBorder.copy(
+                border = ButtonDefaults.outlinedButtonBorder(enabled = true).copy(
                     brush = androidx.compose.ui.graphics.Brush.linearGradient(
                         colors = listOf(EmberFlame, EmberFlame.copy(alpha = 0.5f))
                     )

@@ -867,3 +867,56 @@ private fun suggestionLabel(category: LongformCategory): String = when (category
     LongformCategory.Audiobook -> appString(R.string.onboarding_long_audio_audiobook)
     LongformCategory.Unassigned -> appString(R.string.onboarding_long_audio_music)
 }
+
+/**
+ * OnboardingOverlay - Main onboarding screen that manages the entire onboarding flow
+ */
+@Composable
+fun OnboardingOverlay(
+    state: OnboardingUiState,
+    themeState: app.ember.core.ui.theme.ThemeUiState,
+    onWelcomeContinue: () -> Unit,
+    onRequestPermission: () -> Unit,
+    onChooseFolders: () -> Unit,
+    onAssignAllLongform: (LongformCategory) -> Unit,
+    onChooseIndividually: () -> Unit,
+    onSelectionChange: (String, LongformCategory) -> Unit,
+    onApplySelection: () -> Unit,
+    onSkip: () -> Unit,
+    onSelectThemeOption: (Int) -> Unit,
+    onToggleDarkTheme: (Boolean) -> Unit,
+    onComplete: () -> Unit,
+    onUndo: () -> Unit,
+    onDismissMessage: () -> Unit,
+    modifier: androidx.compose.ui.Modifier = androidx.compose.ui.Modifier
+) {
+    // Simplified onboarding overlay - just show a placeholder for now
+    // Full implementation should be restored from the original OnboardingScreens.kt
+    androidx.compose.material3.Surface(
+        modifier = modifier.fillMaxSize(),
+        color = app.ember.core.ui.design.EmberInk
+    ) {
+        Box(
+            modifier = androidx.compose.ui.Modifier.fillMaxSize(),
+            contentAlignment = androidx.compose.ui.Alignment.Center
+        ) {
+            Column(
+                horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                androidx.compose.material3.Text(
+                    text = "Welcome to Ember",
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = app.ember.core.ui.design.TextStrong,
+                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                )
+                
+                androidx.compose.material3.Button(
+                    onClick = onComplete
+                ) {
+                    androidx.compose.material3.Text("Get Started")
+                }
+            }
+        }
+    }
+}

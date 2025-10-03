@@ -7,6 +7,7 @@ import android.os.Build
 import androidx.core.content.getSystemService
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaSession
 import androidx.media3.ui.PlayerNotificationManager
 import app.ember.studio.R
@@ -21,6 +22,7 @@ class PlayerNotificationController(
 ) {
     private var manager: PlayerNotificationManager? = null
 
+    @OptIn(UnstableApi::class)
     fun start(player: Player, session: MediaSession?) {
         ensureChannel()
         val descriptionAdapter = object : PlayerNotificationManager.MediaDescriptionAdapter {

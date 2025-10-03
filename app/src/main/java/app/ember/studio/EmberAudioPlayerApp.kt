@@ -5,10 +5,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import app.ember.core.ui.theme.EmberAudioPlayerTheme
 import app.ember.core.ui.theme.ThemeUiState
+import app.ember.studio.ui.IgniteOverlay
 import app.ember.studio.feature.songs.SongsScreen
 import app.ember.studio.sleep.SleepTimerUiState
 import app.ember.studio.sleep.SleepTimerEndAction
@@ -133,50 +138,59 @@ fun EmberAudioPlayerAppMinimal(
 ) {
     EmberAudioPlayerTheme(themeState = themeState) {
         Box(modifier = modifier.fillMaxSize()) {
-            // Show onboarding if visible
-            if (onboardingState.isVisible) {
-                OnboardingOverlay(
-                    state = onboardingState,
-                    themeState = themeState,
-                    onWelcomeContinue = onOnboardingWelcomeContinue,
-                    onRequestPermission = onRequestAudioPermission,
-                    onChooseFolders = onChooseFolders,
-                    onAssignAllLongform = onAssignAllLongform,
-                    onChooseIndividually = onChooseLongformIndividually,
-                    onSelectionChange = onLongformSelectionChange,
-                    onApplySelection = onApplyLongformSelection,
-                    onSkip = onSkipLongform,
-                    onSelectThemeOption = onSelectThemeOption,
-                    onToggleDarkTheme = onToggleDarkTheme,
-                    onComplete = onCompleteOnboarding,
-                    onUndo = onUndoLongformChange,
-                    onDismissMessage = onConsumeOnboardingMessage
+            // MASTER_BLUEPRINT 4.1: Warm Ignition splash sequence
+            var showSplash by remember { mutableStateOf(true) }
+            
+            if (showSplash) {
+                IgniteOverlay(
+                    onFinished = { showSplash = false }
                 )
             } else {
-                // Show main content when onboarding is not visible
-                app.ember.studio.navigation.MainNavigation(
-                    modifier = Modifier.fillMaxSize(),
-                    selectedDrawerDestination = homeState.selectedDrawerDestination,
-                    settingsState = settingsState,
-                    themeState = themeState,
-                    miniPlayerState = miniPlayerState,
-                    onToggleRearmOnBootEnabled = onToggleRearmOnBootEnabled,
-                    onSelectRearmMinMinutes = onSelectRearmMinMinutes,
-                    onToggleSkipSilenceEnabled = onToggleSkipSilenceEnabled,
-                    onSelectCrossfadeMs = onSelectCrossfadeMs,
-                    onSelectLongformThresholdMinutes = onSelectLongformThresholdMinutes,
-                    onToggleUseHaptics = onToggleUseHaptics,
-                    onRescanLibrary = onRescanLibrary,
-                    onOpenScanImport = { /* TODO: Implement scan import */ },
-                    onSelectThemeOption = onSelectThemeOption,
-                    onToggleDarkTheme = onToggleDarkTheme,
-                    onToggleDynamicColor = onToggleDynamicColor,
-                    onToggleAmoledBlack = onToggleAmoledBlack,
-                    onDrawerDestinationSelected = onDrawerDestinationSelected,
-                    onPlayPauseClick = onTogglePlayPause,
-                    onSkipNextClick = onPlayNext,
-                    onSkipPreviousClick = onPlayPrevious
-                )
+                // Show onboarding if visible
+                if (onboardingState.isVisible) {
+                    OnboardingOverlay(
+                        state = onboardingState,
+                        themeState = themeState,
+                        onWelcomeContinue = onOnboardingWelcomeContinue,
+                        onRequestPermission = onRequestAudioPermission,
+                        onChooseFolders = onChooseFolders,
+                        onAssignAllLongform = onAssignAllLongform,
+                        onChooseIndividually = onChooseLongformIndividually,
+                        onSelectionChange = onLongformSelectionChange,
+                        onApplySelection = onApplyLongformSelection,
+                        onSkip = onSkipLongform,
+                        onSelectThemeOption = onSelectThemeOption,
+                        onToggleDarkTheme = onToggleDarkTheme,
+                        onComplete = onCompleteOnboarding,
+                        onUndo = onUndoLongformChange,
+                        onDismissMessage = onConsumeOnboardingMessage
+                    )
+                } else {
+                    // Show main content when onboarding is not visible
+                    app.ember.studio.navigation.MainNavigation(
+                        modifier = Modifier.fillMaxSize(),
+                        selectedDrawerDestination = homeState.selectedDrawerDestination,
+                        settingsState = settingsState,
+                        themeState = themeState,
+                        miniPlayerState = miniPlayerState,
+                        onToggleRearmOnBootEnabled = onToggleRearmOnBootEnabled,
+                        onSelectRearmMinMinutes = onSelectRearmMinMinutes,
+                        onToggleSkipSilenceEnabled = onToggleSkipSilenceEnabled,
+                        onSelectCrossfadeMs = onSelectCrossfadeMs,
+                        onSelectLongformThresholdMinutes = onSelectLongformThresholdMinutes,
+                        onToggleUseHaptics = onToggleUseHaptics,
+                        onRescanLibrary = onRescanLibrary,
+                        onOpenScanImport = { /* TODO: Implement scan import */ },
+                        onSelectThemeOption = onSelectThemeOption,
+                        onToggleDarkTheme = onToggleDarkTheme,
+                        onToggleDynamicColor = onToggleDynamicColor,
+                        onToggleAmoledBlack = onToggleAmoledBlack,
+                        onDrawerDestinationSelected = onDrawerDestinationSelected,
+                        onPlayPauseClick = onTogglePlayPause,
+                        onSkipNextClick = onPlayNext,
+                        onSkipPreviousClick = onPlayPrevious
+                    )
+                }
             }
         }
     }

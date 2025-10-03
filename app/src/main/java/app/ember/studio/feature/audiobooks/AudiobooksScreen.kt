@@ -59,7 +59,9 @@ import app.ember.core.ui.design.EmberFlame
 import app.ember.core.ui.design.TextMuted
 import app.ember.core.ui.design.TextStrong
 import app.ember.core.ui.theme.EmberTheme
-import app.ember.studio.navigation.LibraryTab
+import app.ember.studio.LibraryTab
+import app.ember.core.ui.components.AudiobooksEmptyState
+import app.ember.core.ui.components.AudiobookListSkeleton
 import app.ember.studio.feature.songs.SortDirection
 
 // Data classes
@@ -217,17 +219,15 @@ fun AudiobooksScreen(
 
             // Audiobooks Content
             if (isLoading) {
-                Box(
+                AudiobookListSkeleton(
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(
-                        color = EmberFlame
-                    )
-                }
+                    itemCount = 6
+                )
             } else if (audiobooks.isEmpty()) {
-                EmptyAudiobooksState(
-                    modifier = Modifier.fillMaxSize()
+                AudiobooksEmptyState(
+                    modifier = Modifier.fillMaxSize(),
+                    onScanLibrary = { /* TODO: Implement scan library */ },
+                    onImportAudiobooks = { /* TODO: Implement import audiobooks */ }
                 )
             } else {
                 when (viewMode) {

@@ -59,7 +59,9 @@ import app.ember.core.ui.design.EmberFlame
 import app.ember.core.ui.design.TextMuted
 import app.ember.core.ui.design.TextStrong
 import app.ember.core.ui.theme.EmberTheme
-import app.ember.studio.navigation.LibraryTab
+import app.ember.studio.LibraryTab
+import app.ember.core.ui.components.PodcastsEmptyState
+import app.ember.core.ui.components.PodcastListSkeleton
 import app.ember.studio.feature.songs.SortDirection
 
 // Data classes
@@ -225,17 +227,15 @@ fun PodcastsScreen(
 
             // Podcasts Content
             if (isLoading) {
-                Box(
+                PodcastListSkeleton(
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(
-                        color = EmberFlame
-                    )
-                }
+                    itemCount = 6
+                )
             } else if (podcasts.isEmpty()) {
-                EmptyPodcastsState(
-                    modifier = Modifier.fillMaxSize()
+                PodcastsEmptyState(
+                    modifier = Modifier.fillMaxSize(),
+                    onScanLibrary = { /* TODO: Implement scan library */ },
+                    onImportPodcasts = { /* TODO: Implement import podcasts */ }
                 )
             } else {
                 when (viewMode) {

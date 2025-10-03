@@ -48,8 +48,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.painterResource
+import app.ember.studio.R
 import app.ember.core.ui.theme.EmberTheme
 import app.ember.core.ui.components.GlassMorphismCard
+import app.ember.core.ui.design.TypographyBodyLarge
+import app.ember.core.ui.design.TypographyBodyWeight
+import app.ember.core.ui.design.TypographySubtitleMedium
+import app.ember.core.ui.design.TypographySubtitleWeight
+import app.ember.core.ui.design.TypographySubtitleOpacity
+import app.ember.core.ui.design.TypographyLabelMedium
+import app.ember.core.ui.design.TypographyLabelWeight
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -200,8 +209,8 @@ private fun SongItem(
             ) {
                 Text(
                     text = song.title,
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Medium,
+                    fontSize = TypographyBodyLarge, // 16sp as per MASTER_BLUEPRINT
+                    fontWeight = TypographyBodyWeight, // Medium (500) as per MASTER_BLUEPRINT
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -209,17 +218,19 @@ private fun SongItem(
                 
                 Text(
                     text = "${song.artist} • ${song.album}",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    fontSize = TypographySubtitleMedium, // 14sp as per MASTER_BLUEPRINT
+                    fontWeight = TypographySubtitleWeight, // Medium (500) as per MASTER_BLUEPRINT
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = TypographySubtitleOpacity), // 70% opacity as per MASTER_BLUEPRINT
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
             }
             
-            // Duration/Date
+            // Duration/Date - MASTER_BLUEPRINT: Micro labels 12-13 (500) for meta info
             Text(
                 text = formatDuration(song.duration),
-                style = MaterialTheme.typography.bodySmall,
+                fontSize = TypographyLabelMedium, // 12sp as per MASTER_BLUEPRINT
+                fontWeight = TypographyLabelWeight, // Medium (500) as per MASTER_BLUEPRINT
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             
@@ -248,7 +259,7 @@ private fun SongArtwork(
         modifier = modifier.size(48.dp),
         contentAlignment = Alignment.Center
     ) {
-        // Ember glyph artwork placeholder
+        // MASTER_BLUEPRINT: 16dp art placeholder with brand glyph
         Box(
             modifier = Modifier
                 .size(48.dp)
@@ -263,8 +274,9 @@ private fun SongArtwork(
                 ),
             contentAlignment = Alignment.Center
         ) {
+            // Brand glyph - Ember flame logo
             Icon(
-                imageVector = Icons.Filled.PlayArrow,
+                painter = painterResource(id = R.drawable.ic_ember_logo),
                 contentDescription = "Song artwork",
                 tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.size(24.dp)

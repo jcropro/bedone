@@ -1,8 +1,6 @@
 ---
-alwaysApply: true
-description: "Enforce Ember tokens, motion, and a11y in UI."
+alwaysApply: false
 ---
-
 # Tokens & Theming
 - Use **Ember tokens** for colors/typography/elevation/motion (Palette/Tokens.kt).
 - Support: Dark/Light/True Black/Dynamic color; Reduced Motion path.

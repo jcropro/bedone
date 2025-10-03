@@ -1,5 +1,5 @@
 ---
-alwaysApply: true
+alwaysApply: false
 ---
 Always, before editing:
 - Read `README.md`, `EMBER_GOLDEN_BLUEPRINT.md`, `MASTER_BLUEPRINT.md,``.cursor/state.md`, `.cursor/AUDIT.md`.

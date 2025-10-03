@@ -195,7 +195,7 @@ private fun ImportProgress(
             
             // Progress bar
             LinearProgressIndicator(
-                progress = animatedProgress,
+                progress = { animatedProgress },
                 modifier = Modifier.fillMaxWidth(),
                 color = EmberFlame,
                 trackColor = EmberOutline.copy(alpha = 0.3f)
@@ -612,8 +612,8 @@ private fun ScanImportStatusMessage(
 private fun getFileIcon(fileType: FileType): ImageVector = when (fileType) {
     FileType.Audio -> Icons.Filled.MusicNote
     FileType.Video -> Icons.Filled.VideoFile
-    FileType.Playlist -> Icons.Filled.PlaylistPlay
-    FileType.Other -> Icons.Filled.InsertDriveFile
+    FileType.Playlist -> Icons.AutoMirrored.Filled.PlaylistPlay
+    FileType.Other -> Icons.AutoMirrored.Filled.InsertDriveFile
 }
 
 private fun getFileIconColor(fileType: FileType): Color = when (fileType) {

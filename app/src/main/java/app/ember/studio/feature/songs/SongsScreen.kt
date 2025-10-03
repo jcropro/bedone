@@ -28,8 +28,12 @@ import app.ember.studio.library.MetadataEditorScreen
 import app.ember.studio.library.LibraryStatisticsScreen
 import app.ember.studio.library.ScanProgress
 import app.ember.studio.library.SmartPlaylist
+import app.ember.studio.LibraryTab
 import app.ember.studio.library.TrackMetadata
 import app.ember.studio.library.LibraryStatistics
+import app.ember.core.ui.components.EmptyState
+import app.ember.core.ui.components.SongsEmptyState
+import app.ember.core.ui.components.SongListSkeleton
 
 @Composable
 fun SongsScreen(
@@ -42,6 +46,7 @@ fun SongsScreen(
     isMultiSelectMode: Boolean = false,
     searchQuery: String = "",
     selectedTab: LibraryTab = LibraryTab.Songs,
+    isLoading: Boolean = false,
     // Advanced library functionality
     showLibraryScan: Boolean = false,
     showSmartPlaylist: Boolean = false,
@@ -192,17 +197,34 @@ fun SongsScreen(
                         onShowAllFilters = { showFilterSheet = true }
                     )
 
-                    // Songs List
-                    SongsList(
-                        modifier = Modifier.weight(1f),
-                        songs = songs,
-                        selectedSongs = selectedSongs,
-                        isMultiSelectMode = isMultiSelectMode,
-                        searchQuery = searchQuery,
-                        onSongClick = onSongClick,
-                        onSongLongClick = onSongLongClick,
-                        onSelectionChange = onSelectionChange
-                    )
+                    // Songs List, Loading Skeleton, or Empty State
+                    when {
+                        isLoading -> {
+                            SongListSkeleton(
+                                modifier = Modifier.weight(1f),
+                                itemCount = 8
+                            )
+                        }
+                        songs.isEmpty() -> {
+                            SongsEmptyState(
+                                modifier = Modifier.weight(1f),
+                                onScanLibrary = onLibraryScanClick,
+                                onImportMusic = { /* TODO: Implement import music */ }
+                            )
+                        }
+                        else -> {
+                            SongsList(
+                                modifier = Modifier.weight(1f),
+                                songs = songs,
+                                selectedSongs = selectedSongs,
+                                isMultiSelectMode = isMultiSelectMode,
+                                searchQuery = searchQuery,
+                                onSongClick = onSongClick,
+                                onSongLongClick = onSongLongClick,
+                                onSelectionChange = onSelectionChange
+                            )
+                        }
+                    }
                 }
                 
                 // Multi-select bottom bar

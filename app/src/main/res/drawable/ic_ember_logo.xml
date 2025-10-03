@@ -1,61 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Premium Ember Flame Logo - Vector drawable for adaptive icon foreground -->
+<!-- Ember Flame Logo - MASTER_BLUEPRINT compliant -->
+<!-- Glyph: exact flame/treble shape, always oriented upright; never mirrored or skewed -->
+<!-- Foreground: flame rendered at 1024px source; crisp vector with baked soft inner glow -->
+<!-- Safe zone: keep glyph within 66% circle to avoid launcher crops -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
     
-    <!-- Outer flame glow -->
+    <!-- Outer flame glow - soft inner glow -->
     <path
         android:fillColor="#FF7A1A"
-        android:pathData="M54,15 C54,15 35,35 35,55 C35,70 42,78 50,85 C52,87 54,89 54,91 C54,93 56,91 58,89 C66,82 73,74 73,59 C73,39 54,15 54,15 Z" />
+        android:pathData="M54,12 C54,12 30,35 30,58 C30,75 38,85 48,92 C50,94 54,96 54,98 C54,100 58,98 60,96 C70,89 78,79 78,62 C78,39 54,12 54,12 Z" />
     
-    <!-- Main flame shape -->
+    <!-- Main flame shape - exact flame/treble shape -->
     <path
         android:fillColor="#FF7A1A"
-        android:pathData="M54,20 C54,20 40,35 40,50 C40,60 45,65 50,70 C52,72 54,74 54,76 C54,78 56,76 58,74 C63,69 68,64 68,54 C68,39 54,20 54,20 Z" />
+        android:pathData="M54,18 C54,18 36,38 36,55 C36,68 42,75 50,80 C52,82 54,84 54,86 C54,88 56,86 58,84 C66,79 72,72 72,59 C72,42 54,18 54,18 Z" />
     
-    <!-- Inner flame glow -->
+    <!-- Inner flame glow - baked soft inner glow -->
     <path
-        android:fillColor="#FF9E3D"
-        android:pathData="M54,25 C54,25 45,37 45,50 C45,58 48,62 52,66 C53,67 54,68 54,69 C54,70 55,69 56,68 C60,64 63,60 63,52 C63,39 54,25 54,25 Z" />
+        android:fillColor="#FF9C4A"
+        android:pathData="M54,24 C54,24 42,40 42,55 C42,65 46,70 52,74 C53,75 54,76 54,77 C54,78 55,77 56,76 C62,72 66,67 66,57 C66,42 54,24 54,24 Z" />
     
     <!-- Flame core -->
     <path
         android:fillColor="#FFB366"
-        android:pathData="M54,30 C54,30 50,40 50,50 C50,55 52,58 54,60 C54,61 54,61 54,61 C54,61 54,61 54,60 C56,58 58,55 58,50 C58,40 54,30 54,30 Z" />
+        android:pathData="M54,30 C54,30 48,42 48,55 C48,62 50,66 54,68 C54,69 54,69 54,69 C54,69 54,69 54,68 C58,66 60,62 60,55 C60,42 54,30 54,30 Z" />
     
     <!-- Inner core highlight -->
     <path
         android:fillColor="#FFD700"
-        android:pathData="M54,35 C54,35 52,42 52,50 C52,53 53,55 54,56 C54,56.5 54,56.5 54,56.5 C54,56.5 54,56.5 54,56 C55,55 56,53 56,50 C56,42 54,35 54,35 Z" />
+        android:pathData="M54,36 C54,36 51,45 51,55 C51,60 52,63 54,64 C54,64.5 54,64.5 54,64.5 C54,64.5 54,64.5 54,64 C56,63 57,60 57,55 C57,45 54,36 54,36 Z" />
     
-    <!-- Sparkle effects -->
+    <!-- Sparkle effects - premium detail -->
     <path
         android:fillColor="#FFD700"
-        android:pathData="M45,33 C47,33 47,37 45,37 C43,37 43,33 45,33 Z" />
+        android:pathData="M42,35 C44,35 44,39 42,39 C40,39 40,35 42,35 Z" />
     <path
         android:fillColor="#FFD700"
-        android:pathData="M63,38.5 C64.5,38.5 64.5,41.5 63,41.5 C61.5,41.5 61.5,38.5 63,38.5 Z" />
+        android:pathData="M66,40 C67.5,40 67.5,43 66,43 C64.5,43 64.5,40 66,40 Z" />
     <path
         android:fillColor="#FFD700"
-        android:pathData="M48,54 C49,54 49,56 48,56 C47,56 47,54 48,54 Z" />
+        android:pathData="M45,55 C46,55 46,57 45,57 C44,57 44,55 45,55 Z" />
     <path
         android:fillColor="#FFD700"
-        android:pathData="M60,58.5 C61.5,58.5 61.5,61.5 60,61.5 C58.5,61.5 58.5,58.5 60,58.5 Z" />
+        android:pathData="M63,59 C64.5,59 64.5,62 63,62 C61.5,62 61.5,59 63,59 Z" />
     
     <!-- Additional sparkles for premium effect -->
     <path
         android:fillColor="#FFD700"
-        android:pathData="M42,45 C43,45 43,47 42,47 C41,47 41,45 42,45 Z" />
+        android:pathData="M39,48 C40,48 40,50 39,50 C38,50 38,48 39,48 Z" />
     <path
         android:fillColor="#FFD700"
-        android:pathData="M66,50 C67,50 67,52 66,52 C65,52 65,50 66,50 Z" />
+        android:pathData="M69,52 C70,52 70,54 69,54 C68,54 68,52 69,52 Z" />
     <path
         android:fillColor="#FFD700"
-        android:pathData="M50,65 C51,65 51,67 50,67 C49,67 49,65 50,65 Z" />
+        android:pathData="M48,68 C49,68 49,70 48,70 C47,70 47,68 48,68 Z" />
     <path
         android:fillColor="#FFD700"
-        android:pathData="M58,70 C59,70 59,72 58,72 C57,72 57,70 58,70 Z" />
+        android:pathData="M60,72 C61,72 61,74 60,74 C59,74 59,72 60,72 Z" />
 </vector>

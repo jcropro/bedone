@@ -14,7 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.ember.core.ui.theme.EmberTheme
-import app.ember.studio.navigation.LibraryTab
+import app.ember.studio.LibraryTab
+import app.ember.core.ui.components.PlaylistsEmptyState
+import app.ember.core.ui.components.PlaylistListSkeleton
 
 // Data classes
 data class Playlist(
@@ -94,19 +96,16 @@ fun PlaylistsScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             if (isLoading) {
-                Box(
+                PlaylistListSkeleton(
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("Loading playlists...")
-                }
+                    itemCount = 6
+                )
             } else if (playlists.isEmpty()) {
-                Box(
+                PlaylistsEmptyState(
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("No playlists found")
-                }
+                    onCreatePlaylist = onCreatePlaylistClick,
+                    onImportPlaylist = { /* TODO: Implement import playlist */ }
+                )
             } else {
                 Box(
                     modifier = Modifier.fillMaxSize(),

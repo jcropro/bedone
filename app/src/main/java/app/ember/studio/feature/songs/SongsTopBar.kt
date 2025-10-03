@@ -53,10 +53,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import app.ember.core.ui.design.EmberFlame
 import app.ember.core.ui.design.TextMuted
 import app.ember.core.ui.design.TextStrong
+import app.ember.core.ui.design.TypographyDisplaySmall
+import app.ember.core.ui.design.TypographyDisplayWeight
+import app.ember.core.ui.design.TypographySubtitleMedium
+import app.ember.core.ui.design.TypographySubtitleWeight
+import app.ember.core.ui.design.TypographySubtitleOpacity
+import app.ember.core.ui.design.TypographyBodyLarge
+import app.ember.core.ui.design.TypographyBodyWeight
+import app.ember.core.ui.design.TypographyLabelMedium
+import app.ember.core.ui.design.TypographyLabelWeight
 import app.ember.core.ui.theme.EmberTheme
+import app.ember.studio.LibraryTab
 
 /**
  * Songs Top Bar matching the reference image layout
@@ -232,9 +243,9 @@ private fun TabItem(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = tab.title,
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+            text = stringResource(tab.titleRes),
+            fontSize = TypographyDisplaySmall, // 32sp as per MASTER_BLUEPRINT
+            fontWeight = TypographyDisplayWeight, // Bold (700) as per MASTER_BLUEPRINT
             color = if (isSelected) TextStrong else TextMuted,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
@@ -273,11 +284,12 @@ private fun SecondaryInfoRow(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Song count
+        // Song count - MASTER_BLUEPRINT: subtitle 13-14 (500 @70% opacity)
         Text(
             text = "$totalSongs Songs",
-            style = MaterialTheme.typography.bodyMedium,
-            color = TextMuted
+            fontSize = TypographySubtitleMedium, // 14sp as per MASTER_BLUEPRINT
+            fontWeight = TypographySubtitleWeight, // Medium (500) as per MASTER_BLUEPRINT
+            color = TextMuted.copy(alpha = TypographySubtitleOpacity) // 70% opacity as per MASTER_BLUEPRINT
         )
         
         // Sort and Select actions

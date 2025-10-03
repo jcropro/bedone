@@ -256,7 +256,7 @@ fun getDestinationIcon(destinationId: DrawerDestinationId): ImageVector {
         DrawerDestinationId.Widgets -> Icons.Filled.Widgets
         DrawerDestinationId.ScanImport -> Icons.Filled.FolderOpen
         DrawerDestinationId.Settings -> Icons.Filled.Settings
-        DrawerDestinationId.Help -> Icons.Filled.Help
+        DrawerDestinationId.Help -> Icons.AutoMirrored.Filled.Help
     }
 }
 

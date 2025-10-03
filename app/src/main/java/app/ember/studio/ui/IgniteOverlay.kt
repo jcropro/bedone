@@ -35,124 +35,159 @@ import app.ember.core.ui.design.MotionTransition
 import app.ember.core.ui.design.MotionReveal
 
 /**
- * Premium Ember splash screen with flame animations and brand reveal
+ * MASTER_BLUEPRINT compliant Warm Ignition splash sequence
  * 
- * Features:
- * - Ember flame logo with scale animation
- * - Gradient sweep with bloom glow effect
- * - Brand wordmark and tagline reveal
- * - Smooth crossfade to main app
- * - 1100ms total duration with 320ms segments
+ * Exact specification from 4.1 Splash → Warm Ignition:
+ * - Sequence (≤1200ms): icon appears at 80% scale → slow warm-up (color from graphite to ember) → soft bloom → logo moves slightly upward as a radial ember reveal uncovers app background
+ * - Audio: no sounds
+ * - Reduced motion: static fade from icon to home
  */
 @Composable
 fun IgniteOverlay(
     onFinished: () -> Unit
 ) {
-    // One-shot: run ~1100ms then disappear (Gentle 320ms segments as per Golden Blueprint)
+    // One-shot: run ≤1200ms then disappear (MASTER_BLUEPRINT specification)
     var running by rememberSaveable { mutableStateOf(true) }
     LaunchedEffect(Unit) {
-        delay(1100)
+        delay(1200) // ≤1200ms as per blueprint
         running = false
         onFinished()
     }
     if (!running) return
 
-    // Flame glyph scale animation (0.8→1.0 with overshoot)
-    val scale by animateFloatAsState(
-        targetValue = 1.0f,
-        animationSpec = AnimationSpring,
-        label = "flameScale"
+    // Phase 1: Icon appears at 80% scale (0ms → 200ms)
+    val initialScale by animateFloatAsState(
+        targetValue = 0.8f,
+        animationSpec = tween(200, easing = EasingStandard),
+        label = "initialScale"
     )
 
-    // Ember gradient sweep with bloom
-    val sweepAlpha by rememberInfiniteTransition(label = "emberSweep").animateFloat(
-        initialValue = 0.0f, 
-        targetValue = 0.15f,
-        animationSpec = infiniteRepeatable(
-            tween(MotionReveal, easing = EasingStandard), 
-            RepeatMode.Restart
-        ),
-        label = "sweepAlpha"
+    // Phase 2: Slow warm-up - color from graphite to ember (200ms → 600ms)
+    val warmUpProgress by animateFloatAsState(
+        targetValue = 1.0f,
+        animationSpec = tween(400, delayMillis = 200, easing = EasingStandard),
+        label = "warmUp"
     )
 
-    // Text reveal animation
-    val textAlpha by animateFloatAsState(
+    // Phase 3: Soft bloom (600ms → 800ms)
+    val bloomAlpha by animateFloatAsState(
         targetValue = 1.0f,
-        animationSpec = AnimationReveal,
-        label = "textAlpha"
+        animationSpec = tween(200, delayMillis = 600, easing = EasingStandard),
+        label = "bloom"
     )
 
-    // Crossfade to Home (Standard transition timing)
-    val crossfadeAlpha by animateFloatAsState(
+    // Phase 4: Logo moves slightly upward + radial ember reveal (800ms → 1200ms)
+    val logoOffset by animateFloatAsState(
+        targetValue = -16f, // Move upward 16dp
+        animationSpec = tween(400, delayMillis = 800, easing = EasingStandard),
+        label = "logoOffset"
+    )
+
+    val radialRevealProgress by animateFloatAsState(
         targetValue = 1.0f,
-        animationSpec = AnimationTransition, 
-        label = "crossfade"
+        animationSpec = tween(400, delayMillis = 800, easing = EasingStandard),
+        label = "radialReveal"
     )
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(EmberInk)
-            .alpha(crossfadeAlpha)
     ) {
-        // Ember gradient sweep with bloom glow
+        // Radial ember reveal - uncovers app background
         Canvas(modifier = Modifier.fillMaxSize()) {
             val w = size.width
             val h = size.height
-            val center = Offset(w * 0.5f, h * 0.4f)
+            val center = Offset(w * 0.5f, h * 0.5f)
             
-            withTransform({
-                scale(scaleX = scale, scaleY = scale, pivot = center)
-            }) {
-                // Main flame gradient sweep (35° --amber-900 → --amber-700)
-                val flameBrush = Brush.radialGradient(
+            // Radial reveal mask - starts small and expands
+            val revealRadius = (w.coerceAtLeast(h) * 0.8f) * radialRevealProgress
+            
+            // Create radial gradient from center
+            val revealBrush = Brush.radialGradient(
+                colors = listOf(
+                    Color.Transparent,
+                    Color.Transparent,
+                    EmberInk.copy(alpha = 0.95f),
+                    EmberInk
+                ),
+                center = center,
+                radius = revealRadius
+            )
+            
+            drawCircle(
+                brush = revealBrush,
+                radius = revealRadius,
+                center = center
+            )
+        }
+
+        // Soft bloom effect during warm-up phase
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            val w = size.width
+            val h = size.height
+            val center = Offset(w * 0.5f, h * 0.5f)
+            
+            if (bloomAlpha > 0f) {
+                // Soft bloom glow effect
+                val bloomBrush = Brush.radialGradient(
                     colors = listOf(
-                        Color(0xFFFF7A1A).copy(alpha = 0.8f), // --amber-900
-                        Color(0xFFFF9E3D).copy(alpha = 0.6f), // --amber-700
-                        Color(0xFFFFB366).copy(alpha = 0.4f), // --amber-600
+                        EmberFlame.copy(alpha = 0.12f * bloomAlpha),
+                        EmberFlame.copy(alpha = 0.06f * bloomAlpha),
                         Color.Transparent
                     ),
                     center = center,
-                    radius = w.coerceAtLeast(h) * 0.6f
+                    radius = w.coerceAtLeast(h) * 0.4f
                 )
                 
-                // Bloom glow effect (15% bloom glow)
                 drawCircle(
-                    brush = flameBrush,
-                    radius = w.coerceAtLeast(h) * 0.5f,
-                    center = center,
-                    alpha = sweepAlpha
+                    brush = bloomBrush,
+                    radius = w.coerceAtLeast(h) * 0.4f,
+                    center = center
                 )
             }
         }
 
         // Brand reveal: Ember flame + wordmark
         Column(
-            modifier = Modifier.align(Alignment.Center),
+            modifier = Modifier
+                .align(Alignment.Center)
+                .offset(y = logoOffset.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Flame glyph with scale animation
+            // Flame glyph with warm-up color transition
+            val iconColor = if (warmUpProgress > 0f) {
+                // Transition from graphite (#2B2F36) to ember (#FF7A1A)
+                Color(
+                    red = 0x2B + (0xFF - 0x2B) * warmUpProgress,
+                    green = 0x2F + (0x7A - 0x2F) * warmUpProgress,
+                    blue = 0x36 + (0x1A - 0x36) * warmUpProgress
+                )
+            } else {
+                Color(0xFF2B2F36) // Graphite color
+            }
+            
             Icon(
                 painter = painterResource(id = R.drawable.ic_ember_logo),
                 contentDescription = null,
-                tint = EmberFlame,
+                tint = iconColor,
                 modifier = Modifier
                     .size(140.dp)
-                    .scale(scale)
+                    .scale(initialScale)
             )
             
             Spacer(modifier = Modifier.height(24.dp))
             
-            // Brand wordmark with reveal animation
+            // Brand wordmark with warm-up reveal
             Text(
                 text = "Ember",
                 fontSize = 36.sp,
                 fontWeight = FontWeight.Bold,
-                color = TextStrong,
+                color = if (warmUpProgress > 0.5f) TextStrong else TextMuted,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .alpha(textAlpha)
-                    .scale(scale)
+                    .alpha(warmUpProgress)
+                    .scale(initialScale)
             )
             
             Spacer(modifier = Modifier.height(12.dp))
@@ -165,30 +200,9 @@ fun IgniteOverlay(
                 color = TextMuted,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .alpha(textAlpha * 0.8f)
-                    .scale(scale)
+                    .alpha(warmUpProgress * 0.8f)
+                    .scale(initialScale)
             )
-        }
-
-        // Subtle particle effects
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            val w = size.width
-            val h = size.height
-            val center = Offset(w * 0.5f, h * 0.4f)
-            
-            // Small sparkle particles
-            repeat(8) { i ->
-                val angle = (i * 45f) * (Math.PI / 180f)
-                val radius = 80f + (i * 10f)
-                val x = center.x + (radius * kotlin.math.cos(angle)).toFloat()
-                val y = center.y + (radius * kotlin.math.sin(angle)).toFloat()
-                
-                drawCircle(
-                    color = Color(0xFFFFD700).copy(alpha = sweepAlpha * 0.6f),
-                    radius = 3f + (i % 3),
-                    center = Offset(x, y)
-                )
-            }
         }
     }
 }

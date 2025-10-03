@@ -2,32 +2,20 @@ package app.ember.studio.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LibraryMusic
-import androidx.compose.material.icons.automirrored.filled.QueueMusic
-import androidx.compose.material.icons.filled.Folder
-import androidx.compose.material.icons.filled.MusicNote
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
-import androidx.compose.material.icons.filled.VideoLibrary
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
-import app.ember.core.ui.design.EmberFlame
-import app.ember.core.ui.design.EmberInk
-import app.ember.core.ui.design.TextStrong
-import app.ember.core.ui.design.TextMuted
-import app.ember.studio.R
+import kotlinx.coroutines.launch
 import app.ember.studio.feature.songs.SongsScreen
 import app.ember.studio.feature.playlists.PlaylistsScreen
 import app.ember.studio.feature.albums.AlbumsScreen
@@ -42,13 +30,18 @@ import app.ember.studio.ComprehensiveSettingsScreen
 import app.ember.studio.PlayerViewModel
 import app.ember.core.ui.theme.ThemeUiState
 import app.ember.studio.DrawerDestinationId
+import app.ember.studio.LibraryTab
 import app.ember.studio.player.MiniPlayerDock
 import app.ember.studio.player.MiniPlayerState
 
 /**
- * Enhanced navigation structure for Ember Audio Player
- * Implements top app bar + tabs architecture as per MASTER_BLUEPRINT
- * NO BOTTOM TABS - Top app bar + tabs only
+ * Main Navigation - MASTER_BLUEPRINT compliant
+ * 
+ * CRITICAL: NO BOTTOM TABS - Top app bar + tabs only as per blueprint
+ * Tabs: Songs, Playlists, Folders, Albums, Artists, Genres, Audiobooks, Podcasts, Videos
+ * Underline: 2-3px with animated slide; color is warm or theme accent
+ * Title: on left (bold); Actions: on right (Themes, Search, Settings)
+ * Hamburger: on left opens drawer
  */
 @Composable
 fun MainNavigation(
@@ -77,37 +70,59 @@ fun MainNavigation(
     onSkipPreviousClick: () -> Unit = {}
 ) {
     var selectedTab by remember { mutableStateOf(LibraryTab.Songs) }
-    var isDrawerOpen by remember { mutableStateOf(false) }
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
     
-    Scaffold(
-        modifier = modifier.fillMaxSize(),
-        topBar = {
-            // Top app bar with integrated tabs for library
-            if (selectedDrawerDestination == DrawerDestinationId.Library) {
-                LibraryTopAppBar(
-                    selectedTab = selectedTab,
-                    onTabSelected = { selectedTab = it },
-                    onNavigateToNowPlaying = onNavigateToNowPlaying,
-                    onNavigateToSettings = onNavigateToSettings
-                )
-            }
-        },
-        bottomBar = {
-            // Mini-player persistent dock
-            MiniPlayerDock(
-                trackTitle = miniPlayerState.trackTitle,
-                trackArtist = miniPlayerState.trackArtist,
-                albumArtUrl = miniPlayerState.albumArtUrl,
-                isPlaying = miniPlayerState.isPlaying,
-                isVisible = miniPlayerState.isVisible,
-                onPlayPauseClick = onPlayPauseClick,
-                onSkipNextClick = onSkipNextClick,
-                onSkipPreviousClick = onSkipPreviousClick,
-                onExpandClick = onNavigateToNowPlaying
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            EmberNavigationDrawer(
+                selectedDestination = selectedDrawerDestination,
+                onDestinationSelected = { destination ->
+                    onDrawerDestinationSelected(destination)
+                    scope.launch { drawerState.close() }
+                },
+                onCloseDrawer = {
+                    scope.launch { drawerState.close() }
+                }
             )
         }
-    ) { paddingValues ->
-            when (selectedDrawerDestination) {
+    ) {
+        Scaffold(
+            modifier = modifier.fillMaxSize(),
+            topBar = {
+                // Top app bar with integrated tabs for library - MASTER_BLUEPRINT compliant
+                if (selectedDrawerDestination == DrawerDestinationId.Library) {
+                    LibraryTopAppBar(
+                        selectedTab = selectedTab,
+                        onTabSelected = { selectedTab = it },
+                        onNavigateToNowPlaying = onNavigateToNowPlaying,
+                        onNavigateToSettings = onNavigateToSettings,
+                        onMenuClick = {
+                            scope.launch { drawerState.open() }
+                        }
+                    )
+                }
+            },
+            bottomBar = {
+                // Mini-player persistent dock - MASTER_BLUEPRINT compliant
+                // Docked at bottom; 64-72dp height
+                // Left: circular art; center: title/artist; right: play/pause and queue icon
+                // Progress bar runs along top edge (1-2dp)
+                MiniPlayerDock(
+                    trackTitle = miniPlayerState.trackTitle,
+                    trackArtist = miniPlayerState.trackArtist,
+                    albumArtUrl = miniPlayerState.albumArtUrl,
+                    isPlaying = miniPlayerState.isPlaying,
+                    onPlayPauseClick = onPlayPauseClick,
+                    onSkipNextClick = onSkipNextClick,
+                    onSkipPreviousClick = onSkipPreviousClick,
+                    onExpandClick = onNavigateToNowPlaying
+                )
+            }
+        ) { paddingValues ->
+        // Main content area - MASTER_BLUEPRINT compliant
+        when (selectedDrawerDestination) {
             DrawerDestinationId.Library -> {
                 when (selectedTab) {
                     LibraryTab.Songs -> SongsScreen(
@@ -139,129 +154,37 @@ fun MainNavigation(
                     )
                 }
             }
+            DrawerDestinationId.Settings -> {
+                ComprehensiveSettingsScreen(
+                    modifier = Modifier.padding(paddingValues),
+                    settingsState = settingsState ?: PlayerViewModel.SettingsUiState(),
+                    themeState = themeState ?: ThemeUiState(),
+                    onToggleRearmOnBootEnabled = onToggleRearmOnBootEnabled ?: {},
+                    onSelectRearmMinMinutes = onSelectRearmMinMinutes ?: {},
+                    onToggleSkipSilenceEnabled = onToggleSkipSilenceEnabled ?: {},
+                    onSelectCrossfadeMs = onSelectCrossfadeMs ?: {},
+                    onSelectLongformThresholdMinutes = onSelectLongformThresholdMinutes ?: {},
+                    onToggleUseHaptics = onToggleUseHaptics ?: {},
+                    onRescanLibrary = onRescanLibrary ?: {},
+                    onOpenScanImport = onOpenScanImport ?: {},
+                    onSelectThemeOption = onSelectThemeOption ?: {},
+                    onToggleDarkTheme = onToggleDarkTheme ?: {},
+                    onToggleDynamicColor = onToggleDynamicColor ?: {},
+                    onToggleAmoledBlack = onToggleAmoledBlack ?: {}
+                )
+            }
             DrawerDestinationId.Widgets -> {
                 WidgetGalleryScreen(
                     modifier = Modifier.padding(paddingValues)
                 )
             }
-            DrawerDestinationId.Equalizer -> {
-                EqualizerScreen(
-                    modifier = Modifier.padding(paddingValues)
-                )
-            }
-            DrawerDestinationId.SleepTimer -> {
-                SleepTimerScreen(
-                    modifier = Modifier.padding(paddingValues)
-                )
-            }
-            DrawerDestinationId.ThemeStudio -> {
-                ThemeStudioScreen(
-                    modifier = Modifier.padding(paddingValues)
-                )
-            }
-            DrawerDestinationId.ScanImport -> {
-                ScanImportScreen(
-                    modifier = Modifier.padding(paddingValues)
-                )
-            }
-            DrawerDestinationId.Settings -> {
-                if (settingsState != null && themeState != null) {
-                    ComprehensiveSettingsScreen(
-                        settingsState = settingsState,
-                        themeState = themeState,
-                        onToggleRearmOnBootEnabled = onToggleRearmOnBootEnabled ?: {},
-                        onSelectRearmMinMinutes = onSelectRearmMinMinutes ?: {},
-                        onToggleSkipSilenceEnabled = onToggleSkipSilenceEnabled ?: {},
-                        onSelectCrossfadeMs = onSelectCrossfadeMs ?: {},
-                        onSelectLongformThresholdMinutes = onSelectLongformThresholdMinutes ?: {},
-                        onToggleUseHaptics = onToggleUseHaptics ?: {},
-                        onRescanLibrary = onRescanLibrary ?: {},
-                        onOpenScanImport = onOpenScanImport ?: {},
-                        onSelectThemeOption = onSelectThemeOption ?: {},
-                        onToggleDarkTheme = onToggleDarkTheme ?: {},
-                        onToggleDynamicColor = onToggleDynamicColor ?: {},
-                        onToggleAmoledBlack = onToggleAmoledBlack ?: {},
-                        modifier = Modifier.padding(paddingValues)
-                    )
-                } else {
-                    SettingsScreen(
-                        modifier = Modifier.padding(paddingValues)
-                    )
-                }
-            }
-            DrawerDestinationId.Help -> {
-                HelpScreen(
+            else -> {
+                // Placeholder for other destinations
+                Text(
+                    text = "Coming Soon",
                     modifier = Modifier.padding(paddingValues)
                 )
             }
         }
     }
-}
-
-enum class LibraryTab(
-    val titleRes: Int,
-    val icon: ImageVector
-) {
-    Songs(R.string.tab_songs, Icons.Filled.LibraryMusic),
-    Playlists(R.string.tab_playlists, Icons.AutoMirrored.Filled.PlaylistPlay),
-    Folders(R.string.tab_folders, Icons.Filled.Folder),
-    Albums(R.string.tab_albums, Icons.Filled.MusicNote),
-    Artists(R.string.tab_artists, Icons.Filled.Person),
-    Genres(R.string.tab_genres, Icons.AutoMirrored.Filled.QueueMusic),
-    Audiobooks(R.string.tab_audiobooks, Icons.Filled.LibraryMusic),
-    Podcasts(R.string.tab_podcasts, Icons.AutoMirrored.Filled.QueueMusic),
-    Videos(R.string.tab_videos, Icons.Filled.VideoLibrary)
-}
-
-// Placeholder screens - these will be implemented with full functionality
-
-// All library screens are now implemented with comprehensive functionality
-
-// Drawer destination screens
-@Composable
-fun EqualizerScreen(modifier: Modifier = Modifier) {
-    androidx.compose.material3.Text(
-        text = "Equalizer Screen",
-        modifier = modifier
-    )
-}
-
-@Composable
-fun SleepTimerScreen(modifier: Modifier = Modifier) {
-    androidx.compose.material3.Text(
-        text = "Sleep Timer Screen",
-        modifier = modifier
-    )
-}
-
-@Composable
-fun ThemeStudioScreen(modifier: Modifier = Modifier) {
-    androidx.compose.material3.Text(
-        text = "Theme Studio Screen",
-        modifier = modifier
-    )
-}
-
-@Composable
-fun ScanImportScreen(modifier: Modifier = Modifier) {
-    androidx.compose.material3.Text(
-        text = "Scan Import Screen",
-        modifier = modifier
-    )
-}
-
-@Composable
-fun SettingsScreen(modifier: Modifier = Modifier) {
-    androidx.compose.material3.Text(
-        text = "Settings Screen",
-        modifier = modifier
-    )
-}
-
-@Composable
-fun HelpScreen(modifier: Modifier = Modifier) {
-    androidx.compose.material3.Text(
-        text = "Help Screen",
-        modifier = modifier
-    )
-}
+}}

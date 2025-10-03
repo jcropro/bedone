@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.ember.core.ui.design.*
+import app.ember.studio.LibraryTab
 import app.ember.studio.R
 
 /**

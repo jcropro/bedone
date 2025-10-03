@@ -59,7 +59,9 @@ import app.ember.core.ui.design.EmberFlame
 import app.ember.core.ui.design.TextMuted
 import app.ember.core.ui.design.TextStrong
 import app.ember.core.ui.theme.EmberTheme
-import app.ember.studio.navigation.LibraryTab
+import app.ember.studio.LibraryTab
+import app.ember.core.ui.components.GenresEmptyState
+import app.ember.core.ui.components.GenreChipsSkeleton
 import app.ember.studio.feature.songs.SortDirection
 
 // Data classes
@@ -197,17 +199,15 @@ fun GenresScreen(
 
             // Genres Content
             if (isLoading) {
-                Box(
+                GenreChipsSkeleton(
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(
-                        color = EmberFlame
-                    )
-                }
+                    itemCount = 12
+                )
             } else if (genres.isEmpty()) {
-                EmptyGenresState(
-                    modifier = Modifier.fillMaxSize()
+                GenresEmptyState(
+                    modifier = Modifier.fillMaxSize(),
+                    onScanLibrary = { /* TODO: Implement scan library */ },
+                    onImportMusic = { /* TODO: Implement import music */ }
                 )
             } else {
                 when (viewMode) {
