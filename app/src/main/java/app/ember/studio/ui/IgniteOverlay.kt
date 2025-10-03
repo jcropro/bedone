@@ -173,7 +173,7 @@ fun IgniteOverlay(
                 tint = iconColor,
                 modifier = Modifier
                     .size(140.dp)
-                    .scale(initialScale)
+                    .scale(initialScale.coerceAtMost(0.85f))
             )
             
             Spacer(modifier = Modifier.height(24.dp))
@@ -187,7 +187,7 @@ fun IgniteOverlay(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .alpha(warmUpProgress)
-                    .scale(initialScale)
+                    .scale(initialScale.coerceAtMost(0.85f))
             )
             
             Spacer(modifier = Modifier.height(12.dp))
@@ -201,7 +201,7 @@ fun IgniteOverlay(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .alpha(warmUpProgress * 0.8f)
-                    .scale(initialScale)
+                    .scale(initialScale.coerceAtMost(0.85f))
             )
         }
     }

@@ -77,8 +77,14 @@ import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.draw.scale
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material.icons.outlined.Warning
 import app.ember.core.ui.design.*
 import app.ember.core.ui.theme.ThemeUiState
 import app.ember.core.ui.theme.ThemeOption
@@ -340,78 +346,197 @@ private fun PermissionStep(
             .fillMaxSize()
             .padding(32.dp)
             .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.Start
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = appString(R.string.onboarding_permission_title),
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface
+        // Animated Ember logo
+        val infiniteTransition = rememberInfiniteTransition(label = "logo_breathing")
+        val scale by infiniteTransition.animateFloat(
+            initialValue = 0.95f,
+            targetValue = 1.05f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(2000, easing = EasingStandard),
+                repeatMode = RepeatMode.Reverse
+            ),
+            label = "scale"
         )
-        Spacer(modifier = Modifier.height(12.dp))
-        Text(
-            text = appString(R.string.onboarding_permission_body),
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+        
+        Icon(
+            painter = painterResource(id = R.drawable.ic_ember_logo),
+            contentDescription = "Ember",
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier
+                .size(80.dp)
+                .scale(scale)
         )
+        
         Spacer(modifier = Modifier.height(32.dp))
+        
+        Text(
+            text = "Play your local audio",
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface,
+            textAlign = TextAlign.Center
+        )
+        
+        Spacer(modifier = Modifier.height(16.dp))
+        
+        Text(
+            text = "Ember scans your device to show your music.\nNothing leaves your phone.",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            lineHeight = 24.sp
+        )
+        
+        Spacer(modifier = Modifier.height(48.dp))
+        
         Button(
             onClick = onRequestPermission,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            ),
+            shape = RoundedCornerShape(16.dp)
         ) {
             val labelRes = if (state.errorMessage != null) {
                 R.string.onboarding_permission_retry
             } else {
                 R.string.onboarding_permission_allow
             }
-            Text(text = appString(labelRes))
+            Text(
+                text = appString(labelRes),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.padding(vertical = 4.dp)
+            )
         }
-        Spacer(modifier = Modifier.height(12.dp))
+        
+        Spacer(modifier = Modifier.height(16.dp))
+        
         OutlinedButton(
             onClick = onChooseFolders,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.outlinedButtonColors(
+                contentColor = MaterialTheme.colorScheme.primary
+            ),
+            border = BorderStroke(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
+            ),
+            shape = RoundedCornerShape(16.dp)
         ) {
-            Text(text = appString(R.string.onboarding_permission_choose_folders))
+            Text(
+                text = appString(R.string.onboarding_permission_choose_folders),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.padding(vertical = 4.dp)
+            )
         }
+        
         if (state.selectedFolderCount > 0) {
-            val folderCountText = if (state.selectedFolderCount == 1) {
-                appString(R.string.onboarding_permission_selected_folder_single)
-            } else {
-                appString(
-                    R.string.onboarding_permission_selected_folder_plural,
-                    state.selectedFolderCount
-                )
-            }
-            Text(
-                text = folderCountText,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(top = 8.dp)
-            )
-        }
-        if (state.errorMessage != null) {
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = state.errorMessage,
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-        if (state.isScanning) {
             Spacer(modifier = Modifier.height(24.dp))
-            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-            val total = state.totalItemCount.coerceAtLeast(1)
-            val scanned = state.scannedItemCount.coerceAtMost(total)
-            Text(
-                text = appString(
-                    R.string.onboarding_scanning_progress,
-                    scanned,
-                    total
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer
                 ),
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(top = 8.dp)
-            )
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Check,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    val folderCountText = if (state.selectedFolderCount == 1) {
+                        appString(R.string.onboarding_permission_selected_folder_single)
+                    } else {
+                        appString(
+                            R.string.onboarding_permission_selected_folder_plural,
+                            state.selectedFolderCount
+                        )
+                    }
+                    Text(
+                        text = folderCountText,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            }
+        }
+        
+        if (state.errorMessage != null) {
+            Spacer(modifier = Modifier.height(24.dp))
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.errorContainer
+                ),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Warning,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onErrorContainer,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Text(
+                        text = state.errorMessage,
+                        color = MaterialTheme.colorScheme.onErrorContainer,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            }
+        }
+        
+        if (state.isScanning) {
+            Spacer(modifier = Modifier.height(32.dp))
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                ),
+                shape = RoundedCornerShape(12.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    LinearProgressIndicator(
+                        modifier = Modifier.fillMaxWidth(),
+                        color = MaterialTheme.colorScheme.primary,
+                        trackColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    val total = state.totalItemCount.coerceAtLeast(1)
+                    val scanned = state.scannedItemCount.coerceAtMost(total)
+                    Text(
+                        text = appString(
+                            R.string.onboarding_scanning_progress,
+                            scanned,
+                            total
+                        ),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            }
         }
     }
 }
@@ -453,66 +578,147 @@ private fun LongAudioOverview(
             .fillMaxSize()
             .padding(32.dp)
             .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.Top
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = appString(R.string.onboarding_long_audio_title),
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface
+        // Animated icon
+        val infiniteTransition = rememberInfiniteTransition(label = "icon_pulse")
+        val scale by infiniteTransition.animateFloat(
+            initialValue = 0.95f,
+            targetValue = 1.05f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(1500, easing = EasingStandard),
+                repeatMode = RepeatMode.Reverse
+            ),
+            label = "scale"
         )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = appString(R.string.onboarding_long_audio_subtitle),
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Box(
+        
+        Icon(
+            imageVector = Icons.Outlined.LibraryMusic,
+            contentDescription = "Long Audio",
+            tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.15f))
-                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .size(80.dp)
+                .scale(scale)
+        )
+        
+        Spacer(modifier = Modifier.height(32.dp))
+        
+        Text(
+            text = "Long audio found",
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface,
+            textAlign = TextAlign.Center
+        )
+        
+        Spacer(modifier = Modifier.height(16.dp))
+        
+        Text(
+            text = "We can organize longer recordings for you.\nYou can change this anytime.",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            lineHeight = 24.sp
+        )
+        
+        Spacer(modifier = Modifier.height(24.dp))
+        
+        // Count chip
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer
+            ),
+            shape = RoundedCornerShape(20.dp)
         ) {
             Text(
                 text = appString(R.string.onboarding_long_audio_count, state.itemCount),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)
             )
         }
-        Spacer(modifier = Modifier.height(24.dp))
-        FilledTonalButton(
+        
+        Spacer(modifier = Modifier.height(32.dp))
+        
+        // Action buttons
+        Button(
             onClick = { onAssignAllLongform(LongformCategory.Audiobook) },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            ),
+            shape = RoundedCornerShape(16.dp)
         ) {
-            Text(text = appString(R.string.onboarding_long_audio_import_audiobooks))
+            Text(
+                text = appString(R.string.onboarding_long_audio_import_audiobooks),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.padding(vertical = 4.dp)
+            )
         }
+        
         Spacer(modifier = Modifier.height(12.dp))
-        FilledTonalButton(
+        
+        Button(
             onClick = { onAssignAllLongform(LongformCategory.Podcast) },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.secondary,
+                contentColor = MaterialTheme.colorScheme.onSecondary
+            ),
+            shape = RoundedCornerShape(16.dp)
         ) {
-            Text(text = appString(R.string.onboarding_long_audio_import_podcasts))
+            Text(
+                text = appString(R.string.onboarding_long_audio_import_podcasts),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.padding(vertical = 4.dp)
+            )
         }
+        
         Spacer(modifier = Modifier.height(12.dp))
+        
         OutlinedButton(
             onClick = onChooseIndividually,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.outlinedButtonColors(
+                contentColor = MaterialTheme.colorScheme.primary
+            ),
+            border = BorderStroke(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
+            ),
+            shape = RoundedCornerShape(16.dp)
         ) {
-            Text(text = appString(R.string.onboarding_long_audio_choose_individually))
+            Text(
+                text = appString(R.string.onboarding_long_audio_choose_individually),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Medium,
+                modifier = Modifier.padding(vertical = 4.dp)
+            )
         }
-        Spacer(modifier = Modifier.height(12.dp))
-        TextButton(
-            onClick = onSkip,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = appString(R.string.onboarding_long_audio_skip))
+        
+        Spacer(modifier = Modifier.height(32.dp))
+        
+        TextButton(onClick = onSkip) {
+            Text(
+                text = appString(R.string.onboarding_long_audio_skip),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontWeight = FontWeight.Medium
+            )
         }
+        
         Spacer(modifier = Modifier.height(16.dp))
+        
         Text(
-            text = appString(R.string.onboarding_long_audio_hint),
+            text = "Change later in Longform or Settings • Library",
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+            textAlign = TextAlign.Center
         )
     }
 }
@@ -695,7 +901,10 @@ private fun ThemeStep(
                 option = option,
                 selected = index == themeState.selectedOptionIndex,
                 useDarkTheme = themeState.useDarkTheme,
-                onSelect = { onSelectThemeOption(index) }
+                onSelect = { 
+                    onSelectThemeOption(index)
+                    // Auto-apply theme preview
+                }
             )
             Spacer(modifier = Modifier.height(12.dp))
         }
@@ -807,40 +1016,161 @@ private fun ThemeOptionPreview(colorScheme: ColorScheme) {
                 shape = RoundedCornerShape(18.dp)
             )
     ) {
-        Box(
+        // Top App Bar Preview
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(36.dp)
-                .background(colorScheme.primary)
-        )
-        Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
-            Box(
-                modifier = Modifier
-                    .height(10.dp)
-                    .fillMaxWidth(0.45f)
-                    .clip(RoundedCornerShape(5.dp))
-                    .background(colorScheme.primary)
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            repeat(3) {
+                .height(48.dp)
+                .background(colorScheme.surface)
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            // Logo and title
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(8.dp)
-                        .clip(RoundedCornerShape(4.dp))
-                        .background(colorScheme.onSurface.copy(alpha = 0.12f))
+                        .size(24.dp)
+                        .clip(CircleShape)
+                        .background(colorScheme.primary)
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Library",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = colorScheme.onSurface
+                )
             }
+            
+            // Action icons
             Row(
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier.padding(top = 12.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                ThemeColorSwatch(color = colorScheme.primary, borderColor = colorScheme.onSurface)
-                ThemeColorSwatch(color = colorScheme.secondary, borderColor = colorScheme.onSurface)
-                ThemeColorSwatch(color = colorScheme.tertiary, borderColor = colorScheme.onSurface)
-                ThemeColorSwatch(color = colorScheme.surfaceVariant, borderColor = colorScheme.onSurface)
+                Box(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clip(CircleShape)
+                        .background(colorScheme.onSurface.copy(alpha = 0.1f))
+                )
+                Box(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clip(CircleShape)
+                        .background(colorScheme.onSurface.copy(alpha = 0.1f))
+                )
             }
+        }
+        
+        // Tab bar preview
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(colorScheme.surfaceVariant.copy(alpha = 0.3f))
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Text(
+                text = "Songs",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Medium,
+                color = colorScheme.primary
+            )
+            Text(
+                text = "Playlists",
+                style = MaterialTheme.typography.bodyMedium,
+                color = colorScheme.onSurface.copy(alpha = 0.6f)
+            )
+            Text(
+                text = "Albums",
+                style = MaterialTheme.typography.bodyMedium,
+                color = colorScheme.onSurface.copy(alpha = 0.6f)
+            )
+        }
+        
+        // Content area preview
+        Column(modifier = Modifier.padding(16.dp)) {
+            // Song item previews
+            repeat(3) { index ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(colorScheme.primary.copy(alpha = 0.1f))
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth(if (index == 0) 0.8f else 0.6f)
+                                .height(12.dp)
+                                .clip(RoundedCornerShape(6.dp))
+                                .background(colorScheme.onSurface.copy(alpha = 0.8f))
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth(0.4f)
+                                .height(8.dp)
+                                .clip(RoundedCornerShape(4.dp))
+                                .background(colorScheme.onSurface.copy(alpha = 0.4f))
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Box(
+                        modifier = Modifier
+                            .width(32.dp)
+                            .height(8.dp)
+                            .clip(RoundedCornerShape(4.dp))
+                            .background(colorScheme.onSurface.copy(alpha = 0.3f))
+                    )
+                }
+            }
+        }
+        
+        // Bottom mini player preview
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(64.dp)
+                .background(colorScheme.surfaceVariant)
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(colorScheme.primary.copy(alpha = 0.2f))
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = "Song Title",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Medium,
+                    color = colorScheme.onSurface
+                )
+                Text(
+                    text = "Artist Name",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = colorScheme.onSurface.copy(alpha = 0.6f)
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .size(32.dp)
+                    .clip(CircleShape)
+                    .background(colorScheme.primary)
+            )
         }
     }
 }

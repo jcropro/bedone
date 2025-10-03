@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.ui.res.painterResource
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -89,12 +90,26 @@ fun LibraryTopAppBar(
             }
         },
         navigationIcon = {
-            IconButton(onClick = onMenuClick) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(Spacing8),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // Ember Logo - MASTER_BLUEPRINT compliant
                 Icon(
-                    imageVector = Icons.Filled.Menu,
-                    contentDescription = "Menu",
-                    tint = TextStrong
+                    painter = painterResource(id = R.drawable.ic_ember_logo),
+                    contentDescription = "Ember",
+                    tint = EmberFlame,
+                    modifier = Modifier.size(32.dp)
                 )
+                
+                // Hamburger Menu
+                IconButton(onClick = onMenuClick) {
+                    Icon(
+                        imageVector = Icons.Filled.Menu,
+                        contentDescription = "Menu",
+                        tint = TextStrong
+                    )
+                }
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(

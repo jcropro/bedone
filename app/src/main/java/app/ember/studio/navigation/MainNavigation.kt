@@ -17,6 +17,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.launch
 import app.ember.studio.feature.songs.SongsScreen
+import app.ember.studio.feature.songs.Song
 import app.ember.studio.feature.playlists.PlaylistsScreen
 import app.ember.studio.feature.albums.AlbumsScreen
 import app.ember.studio.feature.artists.ArtistsScreen
@@ -126,7 +127,14 @@ fun MainNavigation(
             DrawerDestinationId.Library -> {
                 when (selectedTab) {
                     LibraryTab.Songs -> SongsScreen(
-                        modifier = Modifier.padding(paddingValues)
+                        modifier = Modifier.padding(paddingValues),
+                        songs = listOf(
+                            Song("1", "Sample Song 1", "Artist 1", "Album 1", 180000, "/path/to/song1.mp3", System.currentTimeMillis(), 0, 2024, 5000000L, 320, false),
+                            Song("2", "Sample Song 2", "Artist 2", "Album 2", 240000, "/path/to/song2.mp3", System.currentTimeMillis(), 0, 2024, 6000000L, 320, false),
+                            Song("3", "Sample Song 3", "Artist 3", "Album 3", 200000, "/path/to/song3.mp3", System.currentTimeMillis(), 0, 2024, 5500000L, 320, false),
+                            Song("4", "Sample Song 4", "Artist 4", "Album 4", 300000, "/path/to/song4.mp3", System.currentTimeMillis(), 0, 2024, 7000000L, 320, false),
+                            Song("5", "Sample Song 5", "Artist 5", "Album 5", 220000, "/path/to/song5.mp3", System.currentTimeMillis(), 0, 2024, 5800000L, 320, false)
+                        )
                     )
                     LibraryTab.Playlists -> PlaylistsScreen(
                         modifier = Modifier.padding(paddingValues)
