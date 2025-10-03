@@ -2,9 +2,10 @@ package app.ember.studio
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.LinearEasing
+import app.ember.core.ui.design.EasingStandard
+import app.ember.core.ui.design.EasingDecel
+import app.ember.core.ui.design.AnimationTransition
+import app.ember.core.ui.design.AnimationReveal
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
@@ -41,6 +42,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
@@ -54,6 +56,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -76,6 +79,7 @@ import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import app.ember.core.ui.design.*
 import app.ember.core.ui.theme.ThemeUiState
 import app.ember.core.ui.theme.ThemeOption
 import app.ember.studio.util.formatDuration
@@ -171,21 +175,19 @@ fun OnboardingOverlay(
 
 @Composable
 private fun AnimatedOnboardingBackground() {
-    val p = MaterialTheme.colorScheme.primary
-    val s = MaterialTheme.colorScheme.secondary
-    val t = MaterialTheme.colorScheme.tertiary
+    // Using canonical tokens for premium gradient
     val colors = listOf(
-        p.copy(alpha = 0.55f),
-        s.copy(alpha = 0.45f),
-        t.copy(alpha = 0.40f),
-        p.copy(alpha = 0.55f)
+        EmberFlame.copy(alpha = 0.55f),
+        EmberFlameGlow.copy(alpha = 0.45f),
+        AccentIce.copy(alpha = 0.40f),
+        EmberFlame.copy(alpha = 0.55f)
     )
     val transition = rememberInfiniteTransition(label = "onboardingGradient")
     val shift = transition.animateFloat(
         initialValue = 0f,
         targetValue = 1400f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 20000, easing = LinearEasing),
+            animation = tween(durationMillis = 20000, easing = EasingStandard),
             repeatMode = RepeatMode.Reverse
         ),
         label = "onboardingGradientShift"
@@ -225,28 +227,28 @@ private fun WelcomeStep(onContinue: () -> Unit) {
         repeat(2) {
             scale.animateTo(
                 targetValue = 1f,
-                animationSpec = tween(durationMillis = 120, easing = FastOutSlowInEasing)
+                animationSpec = AnimationTransition
             )
             glow.animateTo(
                 targetValue = 0.35f,
-                animationSpec = tween(durationMillis = 120, easing = FastOutSlowInEasing)
+                animationSpec = AnimationTransition
             )
             scale.animateTo(
                 targetValue = 0.96f,
-                animationSpec = tween(durationMillis = 140, easing = LinearOutSlowInEasing)
+                animationSpec = AnimationReveal
             )
             glow.animateTo(
                 targetValue = 0.18f,
-                animationSpec = tween(durationMillis = 140, easing = LinearOutSlowInEasing)
+                animationSpec = AnimationReveal
             )
         }
         scale.animateTo(
             targetValue = 1f,
-            animationSpec = tween(durationMillis = 240, easing = FastOutSlowInEasing)
+            animationSpec = AnimationTransition
         )
         glow.animateTo(
             targetValue = 0.22f,
-            animationSpec = tween(durationMillis = 240, easing = LinearOutSlowInEasing)
+            animationSpec = AnimationReveal
         )
     }
 
@@ -469,23 +471,24 @@ private fun LongAudioOverview(
         Box(
             modifier = Modifier
                 .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.secondary.copy(alpha = 0.15f))
+                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.15f))
                 .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
             Text(
                 text = appString(R.string.onboarding_long_audio_count, state.itemCount),
-                style = MaterialTheme.typography.labelLarge
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary
             )
         }
         Spacer(modifier = Modifier.height(24.dp))
-        Button(
+        FilledTonalButton(
             onClick = { onAssignAllLongform(LongformCategory.Audiobook) },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = appString(R.string.onboarding_long_audio_import_audiobooks))
         }
         Spacer(modifier = Modifier.height(12.dp))
-        Button(
+        FilledTonalButton(
             onClick = { onAssignAllLongform(LongformCategory.Podcast) },
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -499,7 +502,7 @@ private fun LongAudioOverview(
             Text(text = appString(R.string.onboarding_long_audio_choose_individually))
         }
         Spacer(modifier = Modifier.height(12.dp))
-        OutlinedButton(
+        TextButton(
             onClick = onSkip,
             modifier = Modifier.fillMaxWidth()
         ) {

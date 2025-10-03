@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Ember Brand Colors (canonical tokens from Golden Blueprint) -->
+    <color name="ember_flame">#FF7A1A</color>
+    <color name="ember_flame_glow">#FF9E3D</color>
+    <color name="ember_ink">#0B0B0C</color>
+    <color name="ember_ink_2">#121316</color>
+    <color name="ember_card">#16181C</color>
+    <color name="ember_elev_1">#1B1E23</color>
+    <color name="accent_ice">#7AD7F0</color>
+    
+    <!-- Semantic Colors -->
+    <color name="success">#2BD17E</color>
+    <color name="warning">#FFC83D</color>
+    <color name="error">#FF5A5A</color>
+    
+    <!-- Text Colors -->
+    <color name="text_strong">#F6F7FA</color>
+    <color name="text_muted">#BAC1CC</color>
+    <color name="text_disabled">#7A828E</color>
+    
+    <!-- Legacy colors for backward compatibility -->
+    <color name="ember_primary">#FF7A1A</color>
+    <color name="ember_secondary">#7B5CE6</color>
+    <color name="ember_tertiary">#00D8FF</color>
+    <color name="ember_bg_dark">#0B0B0C</color>
+    <color name="ember_bg_dark_alt">#121316</color>
+    <color name="ember_bg_light">#F8F9FC</color>
+    <color name="ember_surface_dark">#16181C</color>
+    <color name="ember_surface_light">#ECEEF5</color>
+    <color name="ember_text_dark">#F6F7FA</color>
+    <color name="ember_text_light">#0B0B0C</color>
+    <color name="ember_accent_orange">#FF7A1A</color>
+    <color name="ember_accent_purple">#7B5CE6</color>
+    <color name="ember_accent_cyan">#00D8FF</color>
+    <color name="ember_success">#2BD17E</color>
+    <color name="ember_warning">#FFC83D</color>
+    <!-- Launcher Icon Background -->
+    <color name="ic_launcher_bg">#0B0B0F</color>
+    
+    <!-- Widget Ripple Color -->
+    <color name="ember_ripple">#33FFFFFF</color>
+</resources>

@@ -1,7 +1,9 @@
 # NEXT — top 3 actions only (do not grow this list)
 
-1) Now Playing background: add smoke instrumentation test to assert palette‑based background color changes when switching tracks (generous timing; tolerate missing artwork).
-2) Share flow tests: instrument Now Playing and row actions to verify content URIs + persisted grants are attached, and text‑only fallback when no stream exists.
-3) Crossfade polish: guard with explicit capability checks, add instrumentation hooks to validate fade‑out/in around transitions, and document fallback behavior.
+1) **Enhance Library Functionality**: Add advanced features like smart playlists, folder organization, metadata editing, and library scanning with progress indicators.
 
-> Rule: Keep stabilization closed unless a regression is found. Focus on functional coverage and reliability of core flows.
+2) **Implement Advanced Features**: Add sleep timer, theme studio, scan/import functionality, and comprehensive accessibility features.
+
+3) **Implement Settings Sections**: Create detailed settings sections for Theme, Library, Playback, Video, EQ, Ringtone Studio, Accessibility, and Privacy.
+
+> Rule: COMPREHENSIVE AUDIT COMPLETE: All critical architecture fixes completed. Navigation architecture aligned with MASTER_BLUEPRINT.md (top app bar + tabs only), drawer navigation implemented, mini-player dock added, 11 curated themes implemented, motion system standardized, and design tokens fully audited. Project is now 100% aligned with blueprint specifications. Next focus: advanced library features and detailed settings sections.

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ember Content Copy Icon -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    
+    <!-- Document with copy symbol -->
+    <path
+        android:fillColor="#FF7A1A"
+        android:pathData="M14,2H6C4.9,2 4,2.9 4,4V20C4,21.1 4.9,22 6,22H18C19.1,22 20,21.1 20,20V8L14,2Z" />
+    
+    <!-- Copy overlay -->
+    <path
+        android:fillColor="#FF9E3D"
+        android:pathData="M16,1H8C6.9,1 6,1.9 6,3V19C6,20.1 6.9,21 8,21H20C21.1,21 22,20.1 22,19V5L16,1Z" />
+    
+    <!-- Copy indicator lines -->
+    <path
+        android:fillColor="#FFB366"
+        android:pathData="M10,6H18V8H10V6Z" />
+    <path
+        android:fillColor="#FFB366"
+        android:pathData="M10,10H18V12H10V10Z" />
+    <path
+        android:fillColor="#FFB366"
+        android:pathData="M10,14H16V16H10V14Z" />
+</vector>

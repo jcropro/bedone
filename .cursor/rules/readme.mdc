@@ -1,0 +1,6 @@
+---
+alwaysApply: true
+---
+Always, before editing:
+- Read `README.md`, `EMBER_GOLDEN_BLUEPRINT.md`, `MASTER_BLUEPRINT.md,``.cursor/state.md`, `.cursor/AUDIT.md`.
+- Resolve conflicts in favor of the **Golden Blueprint**.

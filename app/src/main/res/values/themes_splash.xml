@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Pre-Android 12 Splash fallback: solid brand background -->
+    <style name="Theme.Ember.Splash" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/ember_splash_bg</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:statusBarColor">@color/ember_ink</item>
+        <item name="android:navigationBarColor">@color/ember_ink</item>
+    </style>
+</resources>

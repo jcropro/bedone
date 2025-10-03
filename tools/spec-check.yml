@@ -1,0 +1,15 @@
+name: Spec Check
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  spec-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run spec linter
+        run: |
+          chmod +x tools/spec_lint.sh
+          tools/spec_lint.sh

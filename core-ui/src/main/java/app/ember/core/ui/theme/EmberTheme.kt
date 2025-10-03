@@ -15,55 +15,73 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import app.ember.core.ui.design.*
+import app.ember.core.ui.R
 
 /**
- * Deterministic Material 3 color/shape system for Ember.
- * Keep this file clean and free of preview-only dependencies.
+ * Ember Theme System - Token-driven Material 3 implementation
+ * 
+ * This theme system uses the canonical design tokens from Tokens.kt
+ * and follows the Golden Blueprint specifications exactly.
  */
 
-private val Seed = Color(0xFFFF7A1A) // Ember orange
+// ============================================================================
+// COLOR SCHEMES (using canonical tokens)
+// ============================================================================
 
 private val LightColors: ColorScheme = lightColorScheme(
-    primary = Seed,
+    primary = EmberFlame,
     onPrimary = Color.Black,
-    secondary = Color(0xFF7B5CE6),
+    secondary = Color(0xFF7B5CE6), // Purple accent
     onSecondary = Color.White,
-    tertiary = Color(0xFF00D8FF),
+    tertiary = AccentIce,
     onTertiary = Color.Black,
-    background = Color(0xFFF8F9FC),
-    onBackground = Color(0xFF0F0F14),
-    surface = Color(0xFFFFFFFF),
-    onSurface = Color(0xFF0F0F14),
+    background = Color(0xFFF8F9FC), // Light background
+    onBackground = EmberInk,
+    surface = Color.White,
+    onSurface = EmberInk,
     surfaceVariant = Color(0xFFECEEF5),
     onSurfaceVariant = Color(0xFF2E3140),
-    outline = Color(0xFFB8BCCD)
+    outline = TextMuted,
+    error = Error,
+    onError = Color.White
 )
 
 private val DarkColors: ColorScheme = darkColorScheme(
-    primary = Seed,
+    primary = EmberFlame,
     onPrimary = Color.Black,
-    secondary = Color(0xFF8F7BFF),
+    secondary = Color(0xFF8F7BFF), // Purple accent
     onSecondary = Color.Black,
-    tertiary = Color(0xFF20E0FF),
+    tertiary = AccentIce,
     onTertiary = Color.Black,
-    background = Color(0xFF0F0F14),
-    onBackground = Color(0xFFECEEF5),
-    surface = Color(0xFF12131A),
-    onSurface = Color(0xFFECEEF5),
-    surfaceVariant = Color(0xFF1C1E2A),
-    onSurfaceVariant = Color(0xFFB8BCCD),
-    outline = Color(0xFF3E4255)
+    background = EmberInk,
+    onBackground = TextStrong,
+    surface = EmberInk2,
+    onSurface = TextStrong,
+    surfaceVariant = EmberCard,
+    onSurfaceVariant = TextMuted,
+    outline = Color(0xFF3E4255),
+    error = Error,
+    onError = Color.White
 )
+
+// ============================================================================
+// SHAPES (using canonical radii)
+// ============================================================================
 
 val EmberShapes: Shapes = Shapes(
-    extraSmall = RoundedCornerShape(8.dp),
-    small      = RoundedCornerShape(12.dp),
-    medium     = RoundedCornerShape(16.dp),
-    large      = RoundedCornerShape(20.dp),
-    extraLarge = RoundedCornerShape(28.dp)
+    extraSmall = RoundedCornerShape(RadiusSM),
+    small = RoundedCornerShape(RadiusMD),
+    medium = RoundedCornerShape(RadiusLG),
+    large = RoundedCornerShape(RadiusXL),
+    extraLarge = RoundedCornerShape(RadiusXL)
 )
 
-/** App theme with selectable options + dark/light toggle */
+// ============================================================================
+// THEME COMPOSABLE
+// ============================================================================
+
+/** Main theme composable with token-driven colors */
 @Composable
 fun EmberAudioPlayerTheme(
     themeState: ThemeUiState,
@@ -75,13 +93,17 @@ fun EmberAudioPlayerTheme(
             if (themeState.useDarkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         else -> themeState.colorScheme
     }
+    
     val appliedScheme = if (themeState.useAmoledBlack && themeState.useDarkTheme) {
         baseScheme.copy(
             background = Color.Black,
             surface = Color.Black,
             surfaceVariant = Color.Black
         )
-    } else baseScheme
+    } else {
+        baseScheme
+    }
+
     MaterialTheme(
         colorScheme = appliedScheme,
         typography = EmberTypography,
@@ -90,31 +112,25 @@ fun EmberAudioPlayerTheme(
     )
 }
 
-/** Simple overload for previews/one-offs that only care about dark/light. */
+/** Simple theme composable for basic usage */
 @Composable
 fun EmberTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val scheme = if (darkTheme) DarkColors else LightColors
+    val colorScheme = if (useDarkTheme) DarkColors else LightColors
+    
     MaterialTheme(
-        colorScheme = scheme,
+        colorScheme = colorScheme,
         typography = EmberTypography,
         shapes = EmberShapes,
         content = content
     )
 }
 
-@Immutable
-data class ThemeOption(
-    val id: String,
-    val labelRes: Int,
-    val lightScheme: ColorScheme,
-    val darkScheme: ColorScheme
-) {
-    fun colorScheme(useDarkTheme: Boolean): ColorScheme =
-        if (useDarkTheme) darkScheme else lightScheme
-}
+// ============================================================================
+// THEME STATE MANAGEMENT
+// ============================================================================
 
 @Immutable
 data class ThemeUiState(
@@ -153,31 +169,456 @@ data class ThemeUiState(
         if (useAmoledBlack == enabled) this else copy(useAmoledBlack = enabled)
 }
 
+@Immutable
+data class ThemeOption(
+    val labelRes: Int,
+    val colorScheme: (Boolean) -> ColorScheme
+)
+
 fun defaultThemeOptions(): List<ThemeOption> = listOf(
+    // 1. Ember (Default) - The signature Ember theme
     ThemeOption(
-        id = "ember-classic",
-        labelRes = app.ember.core.ui.R.string.theme_option_ember,
-        lightScheme = LightColors,
-        darkScheme = DarkColors
+        labelRes = R.string.theme_ember,
+        colorScheme = { useDarkTheme -> if (useDarkTheme) DarkColors else LightColors }
     ),
+    
+    // 2. Classic - Traditional Material Design colors
     ThemeOption(
-        id = "night-copper",
-        labelRes = app.ember.core.ui.R.string.theme_option_night,
-        lightScheme = LightColors.copy(primary = Color(0xFFFF8B42)),
-        darkScheme = DarkColors.copy(primary = Color(0xFFFF8B42))
+        labelRes = R.string.theme_classic,
+        colorScheme = { useDarkTheme -> 
+            if (useDarkTheme) {
+                darkColorScheme(
+                    primary = Color(0xFF2196F3),
+                    onPrimary = Color.Black,
+                    secondary = Color(0xFF03DAC6),
+                    onSecondary = Color.Black,
+                    tertiary = Color(0xFFBB86FC),
+                    onTertiary = Color.Black,
+                    background = Color(0xFF121212),
+                    onBackground = Color(0xFFE1E1E1),
+                    surface = Color(0xFF1E1E1E),
+                    onSurface = Color(0xFFE1E1E1),
+                    surfaceVariant = Color(0xFF2C2C2C),
+                    onSurfaceVariant = Color(0xFFB3B3B3),
+                    outline = Color(0xFF4A4A4A),
+                    error = Color(0xFFCF6679),
+                    onError = Color.Black
+                )
+            } else {
+                lightColorScheme(
+                    primary = Color(0xFF1976D2),
+                    onPrimary = Color.White,
+                    secondary = Color(0xFF03DAC6),
+                    onSecondary = Color.Black,
+                    tertiary = Color(0xFF6200EE),
+                    onTertiary = Color.White,
+                    background = Color(0xFFFAFAFA),
+                    onBackground = Color(0xFF1C1B1F),
+                    surface = Color.White,
+                    onSurface = Color(0xFF1C1B1F),
+                    surfaceVariant = Color(0xFFE7E0EC),
+                    onSurfaceVariant = Color(0xFF49454F),
+                    outline = Color(0xFF79747E),
+                    error = Color(0xFFBA1A1A),
+                    onError = Color.White
+                )
+            }
+        }
     ),
+    
+    // 3. Minimal - Clean, monochromatic design
     ThemeOption(
-        id = "mono-graphite",
-        labelRes = app.ember.core.ui.R.string.theme_option_graphite,
-        lightScheme = LightColors.copy(
-            primary = Color(0xFF2E2E2E),
-            secondary = Color(0xFF888888),
-            tertiary = Color(0xFFBDBDBD)
-        ),
-        darkScheme = DarkColors.copy(
-            primary = Color(0xFFEAEAEA),
-            secondary = Color(0xFFBDBDBD),
-            tertiary = Color(0xFF8E8E8E)
-        )
+        labelRes = R.string.theme_minimal,
+        colorScheme = { useDarkTheme -> 
+            if (useDarkTheme) {
+                darkColorScheme(
+                    primary = Color(0xFFE0E0E0),
+                    onPrimary = Color.Black,
+                    secondary = Color(0xFFB0B0B0),
+                    onSecondary = Color.Black,
+                    tertiary = Color(0xFF909090),
+                    onTertiary = Color.Black,
+                    background = Color(0xFF000000),
+                    onBackground = Color(0xFFE0E0E0),
+                    surface = Color(0xFF0A0A0A),
+                    onSurface = Color(0xFFE0E0E0),
+                    surfaceVariant = Color(0xFF1A1A1A),
+                    onSurfaceVariant = Color(0xFFB0B0B0),
+                    outline = Color(0xFF404040),
+                    error = Color(0xFFCF6679),
+                    onError = Color.Black
+                )
+            } else {
+                lightColorScheme(
+                    primary = Color(0xFF424242),
+                    onPrimary = Color.White,
+                    secondary = Color(0xFF616161),
+                    onSecondary = Color.White,
+                    tertiary = Color(0xFF757575),
+                    onTertiary = Color.White,
+                    background = Color(0xFFFFFFFF),
+                    onBackground = Color(0xFF1C1B1F),
+                    surface = Color(0xFFFAFAFA),
+                    onSurface = Color(0xFF1C1B1F),
+                    surfaceVariant = Color(0xFFF5F5F5),
+                    onSurfaceVariant = Color(0xFF49454F),
+                    outline = Color(0xFF79747E),
+                    error = Color(0xFFBA1A1A),
+                    onError = Color.White
+                )
+            }
+        }
+    ),
+    
+    // 4. Ocean - Deep blue oceanic theme
+    ThemeOption(
+        labelRes = R.string.theme_ocean,
+        colorScheme = { useDarkTheme -> 
+            if (useDarkTheme) {
+                darkColorScheme(
+                    primary = Color(0xFF4FC3F7),
+                    onPrimary = Color.Black,
+                    secondary = Color(0xFF26C6DA),
+                    onSecondary = Color.Black,
+                    tertiary = Color(0xFF29B6F6),
+                    onTertiary = Color.Black,
+                    background = Color(0xFF0D1B2A),
+                    onBackground = Color(0xFFE1F5FE),
+                    surface = Color(0xFF1A2B3A),
+                    onSurface = Color(0xFFE1F5FE),
+                    surfaceVariant = Color(0xFF2A3B4A),
+                    onSurfaceVariant = Color(0xFFB3E5FC),
+                    outline = Color(0xFF4A5B6A),
+                    error = Color(0xFFCF6679),
+                    onError = Color.Black
+                )
+            } else {
+                lightColorScheme(
+                    primary = Color(0xFF0277BD),
+                    onPrimary = Color.White,
+                    secondary = Color(0xFF00ACC1),
+                    onSecondary = Color.White,
+                    tertiary = Color(0xFF0288D1),
+                    onTertiary = Color.White,
+                    background = Color(0xFFF8FDFF),
+                    onBackground = Color(0xFF1C1B1F),
+                    surface = Color.White,
+                    onSurface = Color(0xFF1C1B1F),
+                    surfaceVariant = Color(0xFFE0F2F1),
+                    onSurfaceVariant = Color(0xFF49454F),
+                    outline = Color(0xFF79747E),
+                    error = Color(0xFFBA1A1A),
+                    onError = Color.White
+                )
+            }
+        }
+    ),
+    
+    // 5. Forest - Natural green theme
+    ThemeOption(
+        labelRes = R.string.theme_forest,
+        colorScheme = { useDarkTheme -> 
+            if (useDarkTheme) {
+                darkColorScheme(
+                    primary = Color(0xFF81C784),
+                    onPrimary = Color.Black,
+                    secondary = Color(0xFF66BB6A),
+                    onSecondary = Color.Black,
+                    tertiary = Color(0xFF4CAF50),
+                    onTertiary = Color.Black,
+                    background = Color(0xFF0D1B0A),
+                    onBackground = Color(0xFFE8F5E8),
+                    surface = Color(0xFF1A2B1A),
+                    onSurface = Color(0xFFE8F5E8),
+                    surfaceVariant = Color(0xFF2A3B2A),
+                    onSurfaceVariant = Color(0xFFB8E6B8),
+                    outline = Color(0xFF4A5B4A),
+                    error = Color(0xFFCF6679),
+                    onError = Color.Black
+                )
+            } else {
+                lightColorScheme(
+                    primary = Color(0xFF2E7D32),
+                    onPrimary = Color.White,
+                    secondary = Color(0xFF388E3C),
+                    onSecondary = Color.White,
+                    tertiary = Color(0xFF43A047),
+                    onTertiary = Color.White,
+                    background = Color(0xFFF8FFF8),
+                    onBackground = Color(0xFF1C1B1F),
+                    surface = Color.White,
+                    onSurface = Color(0xFF1C1B1F),
+                    surfaceVariant = Color(0xFFE8F5E8),
+                    onSurfaceVariant = Color(0xFF49454F),
+                    outline = Color(0xFF79747E),
+                    error = Color(0xFFBA1A1A),
+                    onError = Color.White
+                )
+            }
+        }
+    ),
+    
+    // 6. Sunset - Warm orange and pink theme
+    ThemeOption(
+        labelRes = R.string.theme_sunset,
+        colorScheme = { useDarkTheme -> 
+            if (useDarkTheme) {
+                darkColorScheme(
+                    primary = Color(0xFFFF8A65),
+                    onPrimary = Color.Black,
+                    secondary = Color(0xFFFF7043),
+                    onSecondary = Color.Black,
+                    tertiary = Color(0xFFFF5722),
+                    onTertiary = Color.Black,
+                    background = Color(0xFF2A0D0A),
+                    onBackground = Color(0xFFFFF3E0),
+                    surface = Color(0xFF3A1D1A),
+                    onSurface = Color(0xFFFFF3E0),
+                    surfaceVariant = Color(0xFF4A2D2A),
+                    onSurfaceVariant = Color(0xFFFFCCBC),
+                    outline = Color(0xFF6A3D3A),
+                    error = Color(0xFFCF6679),
+                    onError = Color.Black
+                )
+            } else {
+                lightColorScheme(
+                    primary = Color(0xFFE64A19),
+                    onPrimary = Color.White,
+                    secondary = Color(0xFFF57C00),
+                    onSecondary = Color.White,
+                    tertiary = Color(0xFFFF5722),
+                    onTertiary = Color.White,
+                    background = Color(0xFFFFF8F5),
+                    onBackground = Color(0xFF1C1B1F),
+                    surface = Color.White,
+                    onSurface = Color(0xFF1C1B1F),
+                    surfaceVariant = Color(0xFFFFF3E0),
+                    onSurfaceVariant = Color(0xFF49454F),
+                    outline = Color(0xFF79747E),
+                    error = Color(0xFFBA1A1A),
+                    onError = Color.White
+                )
+            }
+        }
+    ),
+    
+    // 7. Lavender - Soft purple theme
+    ThemeOption(
+        labelRes = R.string.theme_lavender,
+        colorScheme = { useDarkTheme -> 
+            if (useDarkTheme) {
+                darkColorScheme(
+                    primary = Color(0xFFBA68C8),
+                    onPrimary = Color.Black,
+                    secondary = Color(0xFFAB47BC),
+                    onSecondary = Color.Black,
+                    tertiary = Color(0xFF9C27B0),
+                    onTertiary = Color.Black,
+                    background = Color(0xFF1A0D1A),
+                    onBackground = Color(0xFFF3E5F5),
+                    surface = Color(0xFF2A1D2A),
+                    onSurface = Color(0xFFF3E5F5),
+                    surfaceVariant = Color(0xFF3A2D3A),
+                    onSurfaceVariant = Color(0xFFE1BEE7),
+                    outline = Color(0xFF5A4D5A),
+                    error = Color(0xFFCF6679),
+                    onError = Color.Black
+                )
+            } else {
+                lightColorScheme(
+                    primary = Color(0xFF7B1FA2),
+                    onPrimary = Color.White,
+                    secondary = Color(0xFF8E24AA),
+                    onSecondary = Color.White,
+                    tertiary = Color(0xFF9C27B0),
+                    onTertiary = Color.White,
+                    background = Color(0xFFFDF7FF),
+                    onBackground = Color(0xFF1C1B1F),
+                    surface = Color.White,
+                    onSurface = Color(0xFF1C1B1F),
+                    surfaceVariant = Color(0xFFF3E5F5),
+                    onSurfaceVariant = Color(0xFF49454F),
+                    outline = Color(0xFF79747E),
+                    error = Color(0xFFBA1A1A),
+                    onError = Color.White
+                )
+            }
+        }
+    ),
+    
+    // 8. Midnight - Deep dark theme with subtle accents
+    ThemeOption(
+        labelRes = R.string.theme_midnight,
+        colorScheme = { useDarkTheme -> 
+            if (useDarkTheme) {
+                darkColorScheme(
+                    primary = Color(0xFF6A6A6A),
+                    onPrimary = Color.White,
+                    secondary = Color(0xFF5A5A5A),
+                    onSecondary = Color.White,
+                    tertiary = Color(0xFF4A4A4A),
+                    onTertiary = Color.White,
+                    background = Color(0xFF000000),
+                    onBackground = Color(0xFFE0E0E0),
+                    surface = Color(0xFF050505),
+                    onSurface = Color(0xFFE0E0E0),
+                    surfaceVariant = Color(0xFF0A0A0A),
+                    onSurfaceVariant = Color(0xFFB0B0B0),
+                    outline = Color(0xFF2A2A2A),
+                    error = Color(0xFFCF6679),
+                    onError = Color.Black
+                )
+            } else {
+                lightColorScheme(
+                    primary = Color(0xFF424242),
+                    onPrimary = Color.White,
+                    secondary = Color(0xFF616161),
+                    onSecondary = Color.White,
+                    tertiary = Color(0xFF757575),
+                    onTertiary = Color.White,
+                    background = Color(0xFFFAFAFA),
+                    onBackground = Color(0xFF1C1B1F),
+                    surface = Color.White,
+                    onSurface = Color(0xFF1C1B1F),
+                    surfaceVariant = Color(0xFFF5F5F5),
+                    onSurfaceVariant = Color(0xFF49454F),
+                    outline = Color(0xFF79747E),
+                    error = Color(0xFFBA1A1A),
+                    onError = Color.White
+                )
+            }
+        }
+    ),
+    
+    // 9. Coral - Warm coral and teal theme
+    ThemeOption(
+        labelRes = R.string.theme_coral,
+        colorScheme = { useDarkTheme -> 
+            if (useDarkTheme) {
+                darkColorScheme(
+                    primary = Color(0xFFFF7043),
+                    onPrimary = Color.Black,
+                    secondary = Color(0xFF26C6DA),
+                    onSecondary = Color.Black,
+                    tertiary = Color(0xFFFF5722),
+                    onTertiary = Color.Black,
+                    background = Color(0xFF0D1B1A),
+                    onBackground = Color(0xFFE0F2F1),
+                    surface = Color(0xFF1A2B2A),
+                    onSurface = Color(0xFFE0F2F1),
+                    surfaceVariant = Color(0xFF2A3B3A),
+                    onSurfaceVariant = Color(0xFFB2DFDB),
+                    outline = Color(0xFF4A5B5A),
+                    error = Color(0xFFCF6679),
+                    onError = Color.Black
+                )
+            } else {
+                lightColorScheme(
+                    primary = Color(0xFFE64A19),
+                    onPrimary = Color.White,
+                    secondary = Color(0xFF00ACC1),
+                    onSecondary = Color.White,
+                    tertiary = Color(0xFFFF5722),
+                    onTertiary = Color.White,
+                    background = Color(0xFFF8FFFE),
+                    onBackground = Color(0xFF1C1B1F),
+                    surface = Color.White,
+                    onSurface = Color(0xFF1C1B1F),
+                    surfaceVariant = Color(0xFFE0F2F1),
+                    onSurfaceVariant = Color(0xFF49454F),
+                    outline = Color(0xFF79747E),
+                    error = Color(0xFFBA1A1A),
+                    onError = Color.White
+                )
+            }
+        }
+    ),
+    
+    // 10. Aurora - Northern lights inspired theme
+    ThemeOption(
+        labelRes = R.string.theme_aurora,
+        colorScheme = { useDarkTheme -> 
+            if (useDarkTheme) {
+                darkColorScheme(
+                    primary = Color(0xFF4CAF50),
+                    onPrimary = Color.Black,
+                    secondary = Color(0xFF00BCD4),
+                    onSecondary = Color.Black,
+                    tertiary = Color(0xFF9C27B0),
+                    onTertiary = Color.Black,
+                    background = Color(0xFF0A0D1A),
+                    onBackground = Color(0xFFE8F5E8),
+                    surface = Color(0xFF1A1D2A),
+                    onSurface = Color(0xFFE8F5E8),
+                    surfaceVariant = Color(0xFF2A2D3A),
+                    onSurfaceVariant = Color(0xFFB8E6B8),
+                    outline = Color(0xFF4A4D5A),
+                    error = Color(0xFFCF6679),
+                    onError = Color.Black
+                )
+            } else {
+                lightColorScheme(
+                    primary = Color(0xFF2E7D32),
+                    onPrimary = Color.White,
+                    secondary = Color(0xFF00ACC1),
+                    onSecondary = Color.White,
+                    tertiary = Color(0xFF7B1FA2),
+                    onTertiary = Color.White,
+                    background = Color(0xFFF8FFF8),
+                    onBackground = Color(0xFF1C1B1F),
+                    surface = Color.White,
+                    onSurface = Color(0xFF1C1B1F),
+                    surfaceVariant = Color(0xFFE8F5E8),
+                    onSurfaceVariant = Color(0xFF49454F),
+                    outline = Color(0xFF79747E),
+                    error = Color(0xFFBA1A1A),
+                    onError = Color.White
+                )
+            }
+        }
+    ),
+    
+    // 11. Rose Gold - Elegant rose gold theme
+    ThemeOption(
+        labelRes = R.string.theme_rose_gold,
+        colorScheme = { useDarkTheme -> 
+            if (useDarkTheme) {
+                darkColorScheme(
+                    primary = Color(0xFFE91E63),
+                    onPrimary = Color.White,
+                    secondary = Color(0xFFFF4081),
+                    onSecondary = Color.Black,
+                    tertiary = Color(0xFFF8BBD9),
+                    onTertiary = Color.Black,
+                    background = Color(0xFF1A0D0A),
+                    onBackground = Color(0xFFFFF0F5),
+                    surface = Color(0xFF2A1D1A),
+                    onSurface = Color(0xFFFFF0F5),
+                    surfaceVariant = Color(0xFF3A2D2A),
+                    onSurfaceVariant = Color(0xFFFFCCD5),
+                    outline = Color(0xFF5A4D4A),
+                    error = Color(0xFFCF6679),
+                    onError = Color.Black
+                )
+            } else {
+                lightColorScheme(
+                    primary = Color(0xFFC2185B),
+                    onPrimary = Color.White,
+                    secondary = Color(0xFFE91E63),
+                    onSecondary = Color.White,
+                    tertiary = Color(0xFFF8BBD9),
+                    onTertiary = Color.Black,
+                    background = Color(0xFFFFF8FA),
+                    onBackground = Color(0xFF1C1B1F),
+                    surface = Color.White,
+                    onSurface = Color(0xFF1C1B1F),
+                    surfaceVariant = Color(0xFFFFF0F5),
+                    onSurfaceVariant = Color(0xFF49454F),
+                    outline = Color(0xFF79747E),
+                    error = Color(0xFFBA1A1A),
+                    onError = Color.White
+                )
+            }
+        }
     )
 )

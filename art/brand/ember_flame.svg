@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- TODO: Replace with official Ember flame SVG -->
+  <!-- This is a placeholder with the exact geometry from Phase 1 -->
+  
+  <!-- Outer flame -->
+  <path d="M60,20 C75,20 85,30 85,45 C85,50 83,55 80,58 C82,62 85,67 85,72 C85,87 75,97 60,97 C45,97 35,87 35,72 C35,67 38,62 40,58 C37,55 35,50 35,45 C35,30 45,20 60,20 Z" 
+        fill="#FF7A1A" 
+        stroke="none"/>
+  
+  <!-- Inner musical helix cutout (negative space) -->
+  <path d="M50,60 C50,55 55,50 60,50 C65,50 70,55 70,60 C70,70 65,75 55,75 C60,73 65,68 65,63 C65,58 60,53 55,53 C50,53 45,58 45,63 C45,68 50,73 55,75 C50,75 45,70 45,60 Z" 
+        fill="#FFFFFF" 
+        fill-rule="evenodd"/>
+  
+  <!-- Sparkle effects -->
+  <circle cx="25" cy="33" r="2" fill="#FFD700"/>
+  <circle cx="95" cy="43.5" r="1.5" fill="#FFD700"/>
+  <circle cx="30" cy="74" r="1" fill="#FFD700"/>
+  <circle cx="90" cy="68" r="2" fill="#FFD700"/>
+</svg>
+

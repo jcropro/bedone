@@ -40,6 +40,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import app.ember.core.ui.design.*
 import app.ember.core.ui.theme.EmberTheme
 import kotlinx.coroutines.delay
 
@@ -54,12 +55,32 @@ fun NowPlayingV2(
     durationMs: Long,
     positionMs: Long,
     isPlaying: Boolean,
+    isLiked: Boolean = false,
+    playbackSpeed: Float = 1.0f,
+    sleepTimerMinutes: Int? = null,
+    shuffleMode: ShuffleMode = ShuffleMode.Off,
+    repeatMode: PlayerRepeatMode = PlayerRepeatMode.Off,
     onTogglePlayPause: () -> Unit,
     onPlayNext: () -> Unit,
     onPlayPrevious: () -> Unit,
     onSeekTo: (Long) -> Unit,
+    onLikeToggle: () -> Unit = {},
+    onQueueClick: () -> Unit = {},
+    onShareClick: () -> Unit = {},
+    onSpeedClick: () -> Unit = {},
+    onTimerClick: () -> Unit = {},
+    onEqualizerClick: () -> Unit = {},
+    onShuffleToggle: () -> Unit = {},
+    onRepeatToggle: () -> Unit = {},
     paletteColor: Color? = null,
-    coverArt: @Composable (() -> Unit)? = null
+    coverArt: @Composable (() -> Unit)? = null,
+    queueItems: List<QueueItem> = emptyList(),
+    currentQueueIndex: Int = 0,
+    isQueueVisible: Boolean = false,
+    onQueueItemClick: (Int) -> Unit = {},
+    onQueueItemRemove: (Int) -> Unit = {},
+    onQueueItemReorder: (Int, Int) -> Unit = { _, _ -> },
+    onQueueDismiss: () -> Unit = {}
 ) {
     Box(
         modifier = modifier.fillMaxSize()
@@ -130,10 +151,10 @@ fun NowPlayingV2(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Seek bar
+            // Flame-accented seek bar
             val total = durationMs.coerceAtLeast(1L).toFloat()
             val pos = positionMs.coerceIn(0L, durationMs).toFloat()
-            Slider(
+            FlameSeekBar(
                 value = pos,
                 onValueChange = { onSeekTo(it.toLong()) },
                 valueRange = 0f..total,
@@ -167,25 +188,43 @@ fun NowPlayingV2(
                 onPlayPrevious = onPlayPrevious
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(Spacing16))
 
-            // Context row (e.g., lyrics, queue, equalizer)
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(onClick = { /* TODO: Lyrics */ }) {
-                    Text("🎵", style = MaterialTheme.typography.titleLarge)
-                }
-                IconButton(onClick = { /* TODO: Queue */ }) {
-                    Text("📋", style = MaterialTheme.typography.titleLarge)
-                }
-                IconButton(onClick = { /* TODO: Equalizer */ }) {
-                    Text("🎛", style = MaterialTheme.typography.titleLarge)
-                }
-            }
+            // Shuffle/Repeat controls
+            ShuffleRepeatButton(
+                shuffleMode = shuffleMode,
+                repeatMode = repeatMode,
+                onShuffleToggle = onShuffleToggle,
+                onRepeatToggle = onRepeatToggle,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(Spacing24))
+
+            // Secondary actions tray
+            SecondaryActionsTray(
+                isLiked = isLiked,
+                playbackSpeed = playbackSpeed,
+                sleepTimerMinutes = sleepTimerMinutes,
+                onLikeToggle = onLikeToggle,
+                onQueueClick = onQueueClick,
+                onShareClick = onShareClick,
+                onSpeedClick = onSpeedClick,
+                onTimerClick = onTimerClick,
+                onEqualizerClick = onEqualizerClick
+            )
         }
+        
+        // Queue bottom sheet
+        QueueBottomSheet(
+            isVisible = isQueueVisible,
+            onDismiss = onQueueDismiss,
+            queueItems = queueItems,
+            currentIndex = currentQueueIndex,
+            onItemClick = onQueueItemClick,
+            onItemRemove = onQueueItemRemove,
+            onItemReorder = onQueueItemReorder
+        )
     }
 }
 
@@ -227,18 +266,42 @@ private fun formatTime(ms: Long): String {
 @Preview(name = "NowPlayingV2 - Light")
 @Composable
 private fun PreviewNowPlayingV2Light() {
-    EmberTheme(darkTheme = false) {
+    EmberTheme(useDarkTheme = false) {
         NowPlayingV2(
             title = "Song Title",
             artist = "Artist Name",
             durationMs = 300000,
             positionMs = 120000,
             isPlaying = true,
+            isLiked = true,
+            playbackSpeed = 1.5f,
+            sleepTimerMinutes = 30,
+            shuffleMode = ShuffleMode.On,
+            repeatMode = PlayerRepeatMode.All,
             onTogglePlayPause = {},
             onPlayNext = {},
             onPlayPrevious = {},
             onSeekTo = {},
+            onLikeToggle = {},
+            onQueueClick = {},
+            onShareClick = {},
+            onSpeedClick = {},
+            onTimerClick = {},
+            onEqualizerClick = {},
+            onShuffleToggle = {},
+            onRepeatToggle = {},
             paletteColor = Color(0xFF7B5CE6),
+            queueItems = listOf(
+                QueueItem("1", "Song Title", "Artist Name", 180000),
+                QueueItem("2", "Next Song", "Another Artist", 240000),
+                QueueItem("3", "Third Song", "Third Artist", 200000)
+            ),
+            currentQueueIndex = 0,
+            isQueueVisible = false,
+            onQueueItemClick = {},
+            onQueueItemRemove = {},
+            onQueueItemReorder = { _, _ -> },
+            onQueueDismiss = {},
             coverArt = {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -257,18 +320,41 @@ private fun PreviewNowPlayingV2Light() {
 @Preview(name = "NowPlayingV2 - Dark")
 @Composable
 private fun PreviewNowPlayingV2Dark() {
-    EmberTheme(darkTheme = true) {
+    EmberTheme(useDarkTheme = true) {
         NowPlayingV2(
             title = "Song Title",
             artist = "Artist Name",
             durationMs = 300000,
             positionMs = 120000,
             isPlaying = false,
+            isLiked = false,
+            playbackSpeed = 1.0f,
+            sleepTimerMinutes = null,
+            shuffleMode = ShuffleMode.Off,
+            repeatMode = PlayerRepeatMode.Off,
             onTogglePlayPause = {},
             onPlayNext = {},
             onPlayPrevious = {},
             onSeekTo = {},
+            onLikeToggle = {},
+            onQueueClick = {},
+            onShareClick = {},
+            onSpeedClick = {},
+            onTimerClick = {},
+            onEqualizerClick = {},
+            onShuffleToggle = {},
+            onRepeatToggle = {},
             paletteColor = Color(0xFF00D8FF),
+            queueItems = listOf(
+                QueueItem("1", "Song Title", "Artist Name", 180000),
+                QueueItem("2", "Next Song", "Another Artist", 240000)
+            ),
+            currentQueueIndex = 1,
+            isQueueVisible = false,
+            onQueueItemClick = {},
+            onQueueItemRemove = {},
+            onQueueItemReorder = { _, _ -> },
+            onQueueDismiss = {},
             coverArt = {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -283,3 +369,4 @@ private fun PreviewNowPlayingV2Dark() {
         )
     }
 }
+

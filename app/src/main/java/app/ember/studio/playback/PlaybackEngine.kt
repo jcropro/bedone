@@ -7,6 +7,13 @@ import androidx.media3.session.MediaSession
  * Lightweight global holder to bridge the app-owned Player into the MediaSessionService
  * without introducing a heavy DI framework. The ViewModel sets the player; the service
  * observes and creates a MediaSession + notification around it.
+ * 
+ * Thread Safety: All methods are synchronized to ensure thread-safe access across
+ * the application lifecycle. Volatile fields ensure visibility across threads.
+ * 
+ * Architecture: This object serves as a bridge between the app's PlayerViewModel
+ * and the MediaSessionService, enabling proper Media3 session management without
+ * tight coupling or complex dependency injection.
  */
 object PlaybackEngine {
     @Volatile

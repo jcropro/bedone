@@ -20,13 +20,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.annotation.OptIn as AndroidOptIn
-import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaController
+import app.ember.studio.media3adapters.MediaControllerAdapters
+import app.ember.studio.media3adapters.MediaSessionAdapters
 import app.ember.studio.RepeatUi
 import app.ember.studio.di.PlayerViewModelProvider
 import app.ember.studio.notifications.PlayerNotificationController
@@ -40,8 +42,6 @@ import androidx.media3.common.Player as ExoPlayerConst
  * NOTE: This file assumes the following types exist elsewhere in the project:
  * - PlayerViewModel, SongShareMessage, and the various UiState classes used below.
  */
-@AndroidOptIn(UnstableApi::class)
-@UnstableApi
 class MainActivity : ComponentActivity() {
 
     private val playerViewModel: PlayerViewModel by viewModels {
@@ -60,8 +60,6 @@ class MainActivity : ComponentActivity() {
     private var mediaSession: MediaSession? = null
     private var mediaController: MediaController? = null
 
-    @AndroidOptIn(UnstableApi::class)
-    @UnstableApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -72,7 +70,16 @@ class MainActivity : ComponentActivity() {
             playerViewModel.onInitialPermissionGranted()
         }
 
+        // Onboarding state will be properly managed by PlayerViewModel
+        // TODO: Remove temporary bypass once onboarding state management is verified
+
         setContent {
+            var showIgnite by rememberSaveable { mutableStateOf(true) }
+            
+            if (showIgnite) {
+                app.ember.studio.ui.IgniteOverlay(onFinished = { showIgnite = false })
+            }
+            
             val homeState by playerViewModel.homeState.collectAsStateWithLifecycle()
             val playerState by playerViewModel.uiState.collectAsStateWithLifecycle()
             val equalizerState by playerViewModel.equalizerState.collectAsStateWithLifecycle()
@@ -123,7 +130,7 @@ class MainActivity : ComponentActivity() {
                 ExoPlayerConst.REPEAT_MODE_ALL -> RepeatUi.All
                 else -> RepeatUi.Off
             }
-            EmberAudioPlayerApp(
+            EmberAudioPlayerAppMinimal(
                 homeState = homeState,
                 playerState = playerState,
                 equalizerState = equalizerState,
@@ -146,7 +153,7 @@ class MainActivity : ComponentActivity() {
                         ?: playerViewModel.togglePlayPause()
                 },
                 onToggleShuffle = {
-                    mediaController?.let { c -> c.setShuffleModeEnabled(!c.shuffleModeEnabled) }
+                    mediaController?.let { c -> MediaControllerAdapters.setShuffleModeEnabled(c, !c.shuffleModeEnabled) }
                         ?: run { /* ViewModel fallback not strictly needed */ }
                 },
                 onCycleRepeat = {
@@ -157,14 +164,14 @@ class MainActivity : ComponentActivity() {
                             androidx.media3.common.Player.REPEAT_MODE_ALL -> androidx.media3.common.Player.REPEAT_MODE_ONE
                             else -> androidx.media3.common.Player.REPEAT_MODE_OFF
                         }
-                        c.setRepeatMode(next)
+                        MediaControllerAdapters.setRepeatMode(c, next)
                     }
                 },
                 onSeekTo = { pos ->
                     mediaController?.seekTo(pos) ?: playerViewModel.seekTo(pos)
                 },
                 onPlaybackSpeedSelected = { speed ->
-                    mediaController?.setPlaybackSpeed(speed) ?: playerViewModel.setPlaybackSpeed(speed)
+                    mediaController?.let { c -> MediaControllerAdapters.setPlaybackSpeed(c, speed) } ?: playerViewModel.setPlaybackSpeed(speed)
                 },
                 onEqualizerEnabledChange = playerViewModel::setEqualizerEnabled,
                 onBandLevelChange = playerViewModel::setBandLevel,
@@ -217,12 +224,12 @@ class MainActivity : ComponentActivity() {
                 onRemoveFromQueue = playerViewModel::removeFromQueue,
                 onPlayNext = {
                     val c = mediaController
-                    if (c != null && c.mediaItemCount > 1 && c.hasNextMediaItem()) c.seekToNextMediaItem()
+                    if (c != null && c.mediaItemCount > 1 && MediaControllerAdapters.hasNextMediaItem(c)) MediaControllerAdapters.seekToNextMediaItem(c)
                     else playerViewModel.playNext()
                 },
                 onPlayPrevious = {
                     val c = mediaController
-                    if (c != null && c.mediaItemCount > 1 && c.hasPreviousMediaItem()) c.seekToPreviousMediaItem()
+                    if (c != null && c.mediaItemCount > 1 && MediaControllerAdapters.hasPreviousMediaItem(c)) MediaControllerAdapters.seekToPreviousMediaItem(c)
                     else playerViewModel.playPrevious()
                 },
                 onAddBookmark = playerViewModel::addLongformBookmarkHere,
@@ -384,7 +391,7 @@ class MainActivity : ComponentActivity() {
     private fun buildControllerWhenSessionReady() {
         val existing = PlaybackEngine.session
         if (existing != null) {
-            try { mediaController = MediaController.Builder(this, existing.token).buildAsync().get() } catch (_: Throwable) {}
+            try { mediaController = MediaSessionAdapters.buildAsync(MediaController.Builder(this, existing.token)).get() } catch (_: Throwable) {}
             return
         }
         Thread {
@@ -393,7 +400,7 @@ class MainActivity : ComponentActivity() {
                 val session = PlaybackEngine.session
                 if (session != null) {
                     try {
-                        val c = MediaController.Builder(this, session.token).buildAsync().get()
+                        val c = MediaSessionAdapters.buildAsync(MediaController.Builder(this, session.token)).get()
                         runOnUiThread { mediaController = c }
                     } catch (_: Throwable) {}
                     break

@@ -207,7 +207,7 @@ private fun formatTime(ms: Long): String {
 @Preview(name = "NowPlaying - Light")
 @Composable
 private fun PreviewNowPlayingLight() {
-    EmberTheme(darkTheme = false) {
+    EmberTheme(useDarkTheme = false) {
         NowPlayingScaffold(
             title = "Song Title",
             artist = "Artist Name",
@@ -236,7 +236,7 @@ private fun PreviewNowPlayingLight() {
 @Preview(name = "NowPlaying - Dark")
 @Composable
 private fun PreviewNowPlayingDark() {
-    EmberTheme(darkTheme = true) {
+    EmberTheme(useDarkTheme = true) {
         NowPlayingScaffold(
             title = "Song Title",
             artist = "Artist Name",

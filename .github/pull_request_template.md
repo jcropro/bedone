@@ -1,25 +1,27 @@
-## Summary
-- What changed (one-liner):
-- Why (rationale):
+## What / Why
+- 
 
-## Build Proof (required)
-- Output of `./gradlew -S :app:assembleDebug` (last ~20 lines):
+## Screenshots / Video (dark + light)
+- 
 
-<details><summary>paste logs</summary>
+## Accessibility
+- [ ] TalkBack path exercised
+- [ ] Large Text & RTL checked
+- [ ] 48dp targets
 
-</details>
+## Performance
+- [ ] Frame trace attached (key interactions)
+- [ ] No new jank spikes
 
-## State Update (required)
-- Updated `docs/STATE.yml`: ✅ / ❌
-- Updated `docs/NEXT.md` (top 3 tasks): ✅ / ❌
-- Modules touched:
-- Files changed (full paths):
+## Compliance
+- [ ] Lint clean (Media3 opt-in isolation)
+- [ ] Uses Tokens (no raw hex)
+- [ ] Spec linter (spec-check) passes
 
-## Invariants (must be true)
-- [ ] No `local.properties` in git (file is generated during setup).
-- [ ] No `kotlinCompilerExtensionVersion` hard-coded in build files.
-- [ ] Theme/typography compile clean (no stray tokens).
-- [ ] `gradle.properties` exists with memory flags.
+## Test Plan
+- 
 
-## Merge Policy
-- This PR contains **no conflict markers**. If present, CI will fail.
+## Links
+- Product: docs/EMBER_GOLDEN_BLUEPRINT.md
+- Execution: docs/EXECUTION_BLUEPRINT_CURSOR.md
+

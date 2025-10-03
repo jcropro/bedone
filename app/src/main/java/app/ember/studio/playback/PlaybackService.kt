@@ -6,18 +6,16 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import androidx.core.content.getSystemService
-import androidx.annotation.OptIn as AndroidOptIn
-import androidx.media3.common.util.UnstableApi
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
 import app.ember.studio.notifications.PlayerNotificationController
+import app.ember.studio.media3adapters.PlaybackServiceAdapters
+import app.ember.studio.R
 
 /**
  * Foreground service hosting the Media3 MediaSession and playback notification.
  * It adopts the app-wide Player provided via [PlaybackEngine].
  */
-@AndroidOptIn(UnstableApi::class)
-@UnstableApi
 class PlaybackService : MediaSessionService() {
 
     private var mediaSession: MediaSession? = null
@@ -29,7 +27,7 @@ class PlaybackService : MediaSessionService() {
         // If a player already exists, initialize immediately; otherwise, wait for it.
         val adopt: (androidx.media3.common.Player) -> Unit = { player ->
             if (mediaSession == null) {
-                mediaSession = MediaSession.Builder(this, player).build()
+                mediaSession = PlaybackServiceAdapters.buildMediaSession(this, player)
                 PlaybackEngine.session = mediaSession
                 notificationController = PlayerNotificationController(this).also {
                     it.start(player, mediaSession)
@@ -49,7 +47,7 @@ class PlaybackService : MediaSessionService() {
     override fun onDestroy() {
         notificationController?.stop()
         notificationController = null
-        mediaSession?.release()
+        PlaybackServiceAdapters.releaseMediaSession(mediaSession)
         mediaSession = null
         PlaybackEngine.session = null
         super.onDestroy()
@@ -60,7 +58,7 @@ class PlaybackService : MediaSessionService() {
             val nm = getSystemService<NotificationManager>() ?: return
             val channel = NotificationChannel(
                 DEFAULT_CHANNEL_ID,
-                "Playback",
+                getString(R.string.notification_channel_playback),
                 NotificationManager.IMPORTANCE_LOW
             )
             nm.createNotificationChannel(channel)
@@ -70,9 +68,9 @@ class PlaybackService : MediaSessionService() {
     private fun tryStartForeground() {
         if (Build.VERSION.SDK_INT >= 26) {
             val notification: Notification = Notification.Builder(this, DEFAULT_CHANNEL_ID)
-                .setContentTitle("Playback")
+                .setContentTitle(getString(R.string.notification_title_playback))
                 .setContentText("")
-                .setSmallIcon(app.ember.studio.R.drawable.ic_launcher_foreground)
+                .setSmallIcon(app.ember.studio.R.drawable.ember_logo)
                 .setOngoing(true)
                 .build()
             try {

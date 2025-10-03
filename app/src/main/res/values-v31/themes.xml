@@ -1,0 +1,8 @@
+<resources>
+    <style name="Theme.Ember.Splash" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowSplashScreenBackground">@drawable/ember_splash_bg</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ember_logo</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">@android:color/transparent</item>
+        <item name="android:windowSplashScreenAnimationDuration">450</item>
+    </style>
+</resources>

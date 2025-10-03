@@ -1,0 +1,18 @@
+---
+alwaysApply: true
+description: "Enforce Ember tokens, motion, and a11y in UI."
+---
+
+# Tokens & Theming
+- Use **Ember tokens** for colors/typography/elevation/motion (Palette/Tokens.kt).
+- Support: Dark/Light/True Black/Dynamic color; Reduced Motion path.
+- Spacing on 4/8dp grid; 48dp min touch; 24dp icons; AA contrast minimum.
+
+# Motion
+- Default durations: taps 120–220ms; transitions ≤ 400ms.
+- Curves: fast-out-slow-in for transitions; spring for micro-interactions.
+- Reduced Motion: swap springs → fades; no parallax.
+
+# UI States
+- Implement loading/empty/error/disabled/selected.
+- TalkBack labels and state announcements for interactive elements.

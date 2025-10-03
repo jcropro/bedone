@@ -16,15 +16,17 @@ class ThemeUiStateTest {
     private val darkScheme = darkColorScheme(primary = Color(0xFFFD8843))
 
     private val sampleOption = ThemeOption(
-        id = "sample",
         labelRes = 0,
-        lightScheme = lightScheme,
-        darkScheme = darkScheme
+        colorScheme = { useDarkTheme -> if (useDarkTheme) darkScheme else lightScheme }
     )
 
     @Test
     fun `selected option returns within bounds`() {
-        val options = listOf(sampleOption, sampleOption.copy(id = "other"))
+        val otherOption = ThemeOption(
+            labelRes = 1,
+            colorScheme = { useDarkTheme -> if (useDarkTheme) darkScheme else lightScheme }
+        )
+        val options = listOf(sampleOption, otherOption)
         val state = ThemeUiState(options = options, selectedOptionIndex = 1, useDarkTheme = false)
 
         assertSame(options[1], state.selectedOption)
@@ -32,7 +34,11 @@ class ThemeUiStateTest {
 
     @Test
     fun `selected option clamps negative index`() {
-        val options = listOf(sampleOption, sampleOption.copy(id = "other"))
+        val otherOption = ThemeOption(
+            labelRes = 1,
+            colorScheme = { useDarkTheme -> if (useDarkTheme) darkScheme else lightScheme }
+        )
+        val options = listOf(sampleOption, otherOption)
         val state = ThemeUiState(options = options, selectedOptionIndex = -2, useDarkTheme = true)
 
         assertSame(options.first(), state.selectedOption)
@@ -40,7 +46,11 @@ class ThemeUiStateTest {
 
     @Test
     fun `selected option clamps index beyond size`() {
-        val options = listOf(sampleOption, sampleOption.copy(id = "other"))
+        val otherOption = ThemeOption(
+            labelRes = 1,
+            colorScheme = { useDarkTheme -> if (useDarkTheme) darkScheme else lightScheme }
+        )
+        val options = listOf(sampleOption, otherOption)
         val state = ThemeUiState(options = options, selectedOptionIndex = 99, useDarkTheme = true)
 
         assertSame(options.last(), state.selectedOption)
@@ -56,14 +66,12 @@ class ThemeUiStateTest {
     @Test
     fun `theme option returns matching color scheme`() {
         val option = ThemeOption(
-            id = "test",
             labelRes = 0,
-            lightScheme = lightScheme,
-            darkScheme = darkScheme
+            colorScheme = { useDarkTheme -> if (useDarkTheme) darkScheme else lightScheme }
         )
 
-        assertSame(lightScheme, option.colorScheme(useDarkTheme = false))
-        assertSame(darkScheme, option.colorScheme(useDarkTheme = true))
+        assertSame(lightScheme, option.colorScheme(false))
+        assertSame(darkScheme, option.colorScheme(true))
     }
 
     @Test
@@ -72,12 +80,16 @@ class ThemeUiStateTest {
         val second = defaultThemeOptions()
 
         assertTrue(first.isNotEmpty(), "Default options must not be empty")
-        assertEquals(first.map { it.id }, second.map { it.id })
+        assertEquals(first.map { it.labelRes }, second.map { it.labelRes })
     }
 
     @Test
     fun `withSelectedOption clamps index and avoids redundant copies`() {
-        val options = listOf(sampleOption, sampleOption.copy(id = "other"))
+        val otherOption = ThemeOption(
+            labelRes = 1,
+            colorScheme = { useDarkTheme -> if (useDarkTheme) darkScheme else lightScheme }
+        )
+        val options = listOf(sampleOption, otherOption)
         val state = ThemeUiState(options = options, selectedOptionIndex = 0, useDarkTheme = false)
 
         val sameState = state.withSelectedOption(0)

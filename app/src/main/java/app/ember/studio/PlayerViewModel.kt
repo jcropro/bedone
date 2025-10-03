@@ -1,8 +1,4 @@
-@file:androidx.annotation.OptIn(UnstableApi::class)
-
 package app.ember.studio
-
-import androidx.annotation.OptIn as AndroidOptIn
 
 import android.app.Application
 import android.media.audiofx.BassBoost
@@ -18,8 +14,8 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
-import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
+import app.ember.studio.media3adapters.PlayerAdapters
 import app.ember.core.ui.theme.ThemeUiState
 import app.ember.studio.onboarding.OnboardingPreferencesRepository
 import app.ember.studio.onboarding.onboardingPreferencesDataStore
@@ -77,8 +73,6 @@ import kotlin.math.abs
 import app.ember.studio.longform.LongformPreferencesRepository
 import app.ember.studio.longform.LongformPref
 import app.ember.studio.longform.longformPreferencesDataStore
-@AndroidOptIn(UnstableApi::class)
-@UnstableApi
 class PlayerViewModel(
     application: Application,
     private val dependencies: Dependencies = Dependencies()
@@ -113,8 +107,8 @@ class PlayerViewModel(
                 events.contains(Player.EVENT_MEDIA_ITEM_TRANSITION) ||
                 events.contains(Player.EVENT_POSITION_DISCONTINUITY)
             ) {
-                val mediaId = player.currentMediaItem?.mediaId
-                val idx = if (mediaId != null) queueOrder.indexOf(mediaId) else player.currentMediaItemIndex
+                val mediaId = PlayerAdapters.getCurrentMediaItem(player)?.mediaId
+                val idx = if (mediaId != null) queueOrder.indexOf(mediaId) else PlayerAdapters.getCurrentMediaItemIndex(player)
                 if (idx >= 0) {
                     currentSongIndex = idx.coerceIn(0, (queueOrder.size - 1).coerceAtLeast(0))
                     recomputeQueueState(currentSongIndex)
@@ -124,8 +118,8 @@ class PlayerViewModel(
                 events.contains(Player.EVENT_SHUFFLE_MODE_ENABLED_CHANGED) ||
                 events.contains(Player.EVENT_REPEAT_MODE_CHANGED)
             ) {
-                val shuffle = player.shuffleModeEnabled
-                val repeat = player.repeatMode
+                val shuffle = PlayerAdapters.getShuffleModeEnabled(player)
+                val repeat = PlayerAdapters.getRepeatMode(player)
                 viewModelScope.launch(ioDispatcher) {
                     playbackPreferencesRepository.setShuffleEnabled(shuffle)
                     // Map to integer directly (0=OFF, 1=ONE, 2=ALL) matches ExoPlayer
@@ -153,7 +147,7 @@ class PlayerViewModel(
             // Trigger fade-in on automatic transition when crossfade is enabled
             if (crossfadeDurationMs > 0 && reason == Player.MEDIA_ITEM_TRANSITION_REASON_AUTO) {
                 crossfadeFadeInEndTimestampMs = now() + crossfadeDurationMs
-                try { player.volume = 0f } catch (_: Throwable) {}
+                try { PlayerAdapters.setVolume(player, 0f) } catch (_: Throwable) {}
             }
         }
     }
@@ -192,7 +186,8 @@ class PlayerViewModel(
             albums = sortAlbums(allAlbums, SortDirection.Ascending),
             artists = sortArtists(allArtists, SortDirection.Ascending),
             genres = SampleLibrary.genres,
-            longformItems = longformLibrary,
+            audiobooks = longformLibrary.filter { it.category == LongformCategory.Audiobook },
+            podcasts = longformLibrary.filter { it.category == LongformCategory.Podcast },
             longformFilter = LongformFilter.All,
             // Videos populate after repository scan; start empty
             videos = emptyList(),
@@ -247,22 +242,22 @@ class PlayerViewModel(
     private var longformPrefs: Map<String, LongformPref> = emptyMap()
     private val sleepTimerCallbacks = object : SleepTimerCallbacks {
         override val currentVolume: Float
-            get() = player.volume
+            get() = PlayerAdapters.getVolume(player)
 
         override fun setVolume(volume: Float) {
-            player.volume = volume.coerceIn(0f, 1f)
+            PlayerAdapters.setVolume(player, volume.coerceIn(0f, 1f))
         }
 
         override fun pausePlayback() {
             clearPendingSleepTimerAction()
-            player.pause()
+            PlayerAdapters.pause(player)
             showSleepTimerMessage(R.string.sleep_timer_message_completed_pause)
             persistSleepTimerPreferences()
         }
 
         override fun stopPlayback() {
             clearPendingSleepTimerAction()
-            player.stop()
+            PlayerAdapters.stop(player)
             showSleepTimerMessage(R.string.sleep_timer_message_completed_stop)
             persistSleepTimerPreferences()
         }
@@ -348,8 +343,8 @@ class PlayerViewModel(
         } catch (_: Throwable) {
             // Ignore if service classes unavailable in certain test environments
         }
-        player.addListener(listener)
-        player.repeatMode = Player.REPEAT_MODE_ALL
+        PlayerAdapters.addListener(player, listener)
+        PlayerAdapters.setRepeatMode(player, Player.REPEAT_MODE_ALL)
         val firstSong = allSongs.firstOrNull()
         if (firstSong != null) {
             val idx = queueOrder.indexOf(firstSong.id).takeIf { it >= 0 } ?: 0
@@ -379,8 +374,8 @@ class PlayerViewModel(
     override fun onCleared() {
         clearPendingSleepTimerAction()
         sleepTimerController.cancelTimer()
-        player.removeListener(listener)
-        player.release()
+        PlayerAdapters.removeListener(player, listener)
+        PlayerAdapters.release(player)
         releaseAudioEffects()
         super.onCleared()
     }
@@ -473,12 +468,12 @@ class PlayerViewModel(
         clearPendingSleepTimerAction()
         val trackId = currentSongId
         if (trackId == null) {
-            player.stop()
+            PlayerAdapters.stop(player)
             persistSleepTimerPreferences()
             return
         }
         pendingSleepTimerAction = PendingSleepTimerAction.StopAfterTrack(trackId)
-        if (player.playbackState == Player.STATE_ENDED) {
+        if (PlayerAdapters.getPlaybackState(player) == Player.STATE_ENDED) {
             handleSleepTimerPlaybackCompleted()
         }
         persistSleepTimerPreferences()
@@ -488,19 +483,19 @@ class PlayerViewModel(
         clearPendingSleepTimerAction()
         val snapshot = queueOrder.toList()
         if (snapshot.isEmpty()) {
-            player.stop()
+            PlayerAdapters.stop(player)
             persistSleepTimerPreferences()
             return
         }
         val trackId = currentSongId
         if (trackId == null) {
-            player.stop()
+            PlayerAdapters.stop(player)
             persistSleepTimerPreferences()
             return
         }
         val index = snapshot.indexOf(trackId)
         if (index == -1) {
-            player.stop()
+            PlayerAdapters.stop(player)
             persistSleepTimerPreferences()
             return
         }
@@ -508,7 +503,7 @@ class PlayerViewModel(
             queueSnapshot = snapshot,
             currentIndex = index
         )
-        if (player.playbackState == Player.STATE_ENDED) {
+        if (PlayerAdapters.getPlaybackState(player) == Player.STATE_ENDED) {
             handleSleepTimerPlaybackCompleted()
         }
         persistSleepTimerPreferences()
@@ -518,14 +513,14 @@ class PlayerViewModel(
         when (val pending = pendingSleepTimerAction) {
             is PendingSleepTimerAction.StopAfterTrack -> {
                 clearPendingSleepTimerAction()
-                player.stop()
+                PlayerAdapters.stop(player)
             }
             is PendingSleepTimerAction.StopAfterQueue -> {
                 val snapshot = pending.queueSnapshot
                 val nextIndex = pending.currentIndex + 1
                 if (nextIndex >= snapshot.size) {
                     clearPendingSleepTimerAction()
-                    player.stop()
+                    PlayerAdapters.stop(player)
                 } else {
                     val nextId = snapshot[nextIndex]
                     val nextSong = findSongById(nextId)
@@ -541,7 +536,7 @@ class PlayerViewModel(
                         syncPlayerTimelineFromQueue(startIndex = currentSongIndex, play = true)
                     } else {
                         clearPendingSleepTimerAction()
-                        player.stop()
+                        PlayerAdapters.stop(player)
                     }
                 }
             }
@@ -861,7 +856,7 @@ class PlayerViewModel(
         if (queueOrder.size == 1) {
             queueOrder.clear()
             currentSongIndex = 0
-            player.stop()
+            PlayerAdapters.stop(player)
             _homeState.update { it.copy(queue = QueueUiState()) }
             return
         }
@@ -870,19 +865,19 @@ class PlayerViewModel(
         if (removingIndex <= currentSongIndex) {
             currentSongIndex = (currentSongIndex - 1).coerceAtLeast(0).coerceAtMost(queueOrder.lastIndex)
         }
-        syncPlayerTimelineFromQueue(startIndex = currentSongIndex, play = player.playWhenReady)
+        syncPlayerTimelineFromQueue(startIndex = currentSongIndex, play = PlayerAdapters.getPlayWhenReady(player))
     }
 
     fun togglePlayPause() {
-        player.playWhenReady = !player.playWhenReady
+        PlayerAdapters.setPlayWhenReady(player, !PlayerAdapters.getPlayWhenReady(player))
         persistPlaybackQueue()
     }
 
     fun setPlaybackSpeed(speed: Float) {
         val speeds = _uiState.value.availablePlaybackSpeeds
         val target = speeds.firstOrNull { abs(it - speed) < PLAYBACK_SPEED_TOLERANCE } ?: return
-        val currentParameters = player.playbackParameters
-        player.playbackParameters = PlaybackParameters(target, currentParameters.pitch)
+        val currentParameters = PlayerAdapters.getPlaybackParameters(player)
+        PlayerAdapters.setPlaybackSpeed(player, target)
         _uiState.update { it.copy(playbackSpeed = target) }
         viewModelScope.launch(ioDispatcher) {
             playbackPreferencesRepository.setPlaybackSpeed(target)
@@ -905,16 +900,16 @@ class PlayerViewModel(
     }
 
     fun seekTo(positionMs: Long) {
-        val duration = player.duration.takeIf { it > 0 } ?: 0L
-        player.seekTo(positionMs.coerceIn(0L, duration))
+        val duration = PlayerAdapters.getDuration(player).takeIf { it > 0 } ?: 0L
+        PlayerAdapters.seekTo(player, positionMs.coerceIn(0L, duration))
         persistPlaybackQueue()
     }
 
     fun addLongformBookmarkHere() {
         val id = currentSongId ?: return
-        val duration = player.duration.takeIf { it > 0 } ?: 0L
+        val duration = PlayerAdapters.getDuration(player).takeIf { it > 0 } ?: 0L
         if (duration <= 0L) return
-        val pos = player.currentPosition.coerceIn(0L, duration)
+        val pos = PlayerAdapters.getCurrentPosition(player).coerceIn(0L, duration)
         viewModelScope.launch(ioDispatcher) { longformPreferencesRepository.setBookmark(id, pos) }
         updateState()
     }
@@ -923,7 +918,7 @@ class PlayerViewModel(
         val id = currentSongId ?: return
         val bookmark = longformPrefs[id]?.bookmarkMs ?: return
         seekTo(bookmark)
-        if (!player.playWhenReady) togglePlayPause()
+        if (!PlayerAdapters.getPlayWhenReady(player)) togglePlayPause()
     }
 
     fun clearLongformBookmark() {
@@ -944,8 +939,8 @@ class PlayerViewModel(
             queueOrder = queueOrder.toList(),
             currentIndex = index,
             nowPlayingId = queueOrder.getOrNull(index),
-            positionMs = player.currentPosition.coerceAtLeast(0L),
-            playWhenReady = player.playWhenReady
+            positionMs = PlayerAdapters.getCurrentPosition(player).coerceAtLeast(0L),
+            playWhenReady = PlayerAdapters.getPlayWhenReady(player)
         )
         viewModelScope.launch(ioDispatcher) {
             playbackQueueRepository.update(snapshot)
@@ -967,9 +962,9 @@ class PlayerViewModel(
                     currentSongIndex = targetIndex
                     val targetId = queueOrder[targetIndex]
                     syncPlayerTimelineFromQueue(startIndex = targetIndex, play = prefs.playWhenReady)
-                    val duration = player.duration.takeIf { it > 0 } ?: 0L
+                    val duration = PlayerAdapters.getDuration(player).takeIf { it > 0 } ?: 0L
                     if (duration > 0L) {
-                        player.seekTo(prefs.positionMs.coerceIn(0L, duration))
+                        PlayerAdapters.seekTo(player, prefs.positionMs.coerceIn(0L, duration))
                     }
                 }
             }
@@ -1193,6 +1188,7 @@ class PlayerViewModel(
                     if (preferences.isComplete) {
                         state.copy(isVisible = false, step = OnboardingStep.Complete, statusMessage = null)
                     } else {
+                        // Show onboarding if not complete
                         val step = if (state.step == OnboardingStep.Complete) {
                             OnboardingStep.Welcome
                         } else {
@@ -1259,27 +1255,27 @@ class PlayerViewModel(
                     val speeds = _uiState.value.availablePlaybackSpeeds
                     val target = speeds.firstOrNull { abs(it - prefs.playbackSpeed) < PLAYBACK_SPEED_TOLERANCE }
                         ?: 1.0f
-                    val currentParameters = player.playbackParameters
+                    val currentParameters = PlayerAdapters.getPlaybackParameters(player)
                     if (abs(currentParameters.speed - target) >= PLAYBACK_SPEED_TOLERANCE) {
-                        player.playbackParameters = PlaybackParameters(target, currentParameters.pitch)
+                        PlayerAdapters.setPlaybackSpeed(player, target)
                     }
                     _uiState.update { it.copy(playbackSpeed = target) }
                     // Restore shuffle and repeat
-                    if (player.shuffleModeEnabled != prefs.shuffleEnabled) {
-                        player.shuffleModeEnabled = prefs.shuffleEnabled
+                    if (PlayerAdapters.getShuffleModeEnabled(player) != prefs.shuffleEnabled) {
+                        PlayerAdapters.setShuffleModeEnabled(player, prefs.shuffleEnabled)
                     }
                     val desiredRepeat = when (prefs.repeatMode) {
                         Player.REPEAT_MODE_ONE -> Player.REPEAT_MODE_ONE
                         Player.REPEAT_MODE_ALL -> Player.REPEAT_MODE_ALL
                         else -> Player.REPEAT_MODE_OFF
                     }
-                    if (player.repeatMode != desiredRepeat) {
-                        player.repeatMode = desiredRepeat
+                    if (PlayerAdapters.getRepeatMode(player) != desiredRepeat) {
+                        PlayerAdapters.setRepeatMode(player, desiredRepeat)
                     }
                     // Apply skip silence (ExoPlayer-specific)
                     (player as? ExoPlayer)?.let { exo ->
-                        if (exo.skipSilenceEnabled != prefs.skipSilenceEnabled) {
-                            exo.skipSilenceEnabled = prefs.skipSilenceEnabled
+                        if (PlayerAdapters.getSkipSilenceEnabled(exo) != prefs.skipSilenceEnabled) {
+                            PlayerAdapters.setSkipSilenceEnabled(exo, prefs.skipSilenceEnabled)
                         }
                     }
                     longformThresholdMs = (prefs.longformThresholdMinutes.coerceIn(5, 120) * 60_000L)
@@ -1294,7 +1290,7 @@ class PlayerViewModel(
                     // Update engine crossfade duration; restore volume if disabled
                     crossfadeDurationMs = prefs.crossfadeMs.coerceIn(0, 12_000).toLong()
                     if (crossfadeDurationMs <= 0L && !isSleepTimerFadeActive()) {
-                        try { player.volume = 1f } catch (_: Throwable) {}
+                        try { PlayerAdapters.setVolume(player, 1f) } catch (_: Throwable) {}
                     }
                 }
             }
@@ -1402,7 +1398,7 @@ class PlayerViewModel(
 
     private fun restorePlayerVolume(volume: Float?) {
         if (volume != null) {
-            player.volume = volume.coerceIn(0f, 1f)
+            PlayerAdapters.setVolume(player, volume.coerceIn(0f, 1f))
         }
     }
 
@@ -1410,12 +1406,12 @@ class PlayerViewModel(
         when (action) {
             SleepTimerEndAction.PausePlayback -> {
                 clearPendingSleepTimerAction()
-                player.pause()
+                PlayerAdapters.pause(player)
                 showSleepTimerMessage(R.string.sleep_timer_message_completed_pause)
             }
             SleepTimerEndAction.StopPlayback -> {
                 clearPendingSleepTimerAction()
-                player.stop()
+                PlayerAdapters.stop(player)
                 showSleepTimerMessage(R.string.sleep_timer_message_completed_stop)
             }
             SleepTimerEndAction.StopAfterTrack -> {
@@ -1714,7 +1710,10 @@ class PlayerViewModel(
         longformLibrary = snapshot
         previousLongformLibrary = null
         _homeState.update { state ->
-            state.copy(longformItems = longformLibrary)
+            state.copy(
+                audiobooks = longformLibrary.filter { it.category == LongformCategory.Audiobook },
+                podcasts = longformLibrary.filter { it.category == LongformCategory.Podcast }
+            )
         }
         _onboardingState.update { state ->
             state.copy(
@@ -1739,19 +1738,49 @@ class PlayerViewModel(
         }
     }
 
+    fun resetOnboarding() {
+        _onboardingState.update { state ->
+            state.copy(isVisible = true, step = OnboardingStep.Welcome, statusMessage = null)
+        }
+        viewModelScope.launch(ioDispatcher) {
+            onboardingPreferencesRepository.setOnboardingComplete(false)
+        }
+    }
+    
+    // Debug function to test onboarding state
+    fun debugOnboardingState() {
+        viewModelScope.launch(ioDispatcher) {
+            val currentPrefs = onboardingPreferencesRepository.preferences.firstOrNull()
+            println("DEBUG: Onboarding preferences - isComplete: ${currentPrefs?.isComplete}")
+            println("DEBUG: Onboarding state - isVisible: ${_onboardingState.value.isVisible}, step: ${_onboardingState.value.step}")
+        }
+    }
+    
+    fun forceShowOnboarding() {
+        _onboardingState.update { state ->
+            state.copy(isVisible = true, step = OnboardingStep.Welcome, statusMessage = null)
+        }
+    }
+    
+    fun forceHideOnboarding() {
+        _onboardingState.update { state ->
+            state.copy(isVisible = false, step = OnboardingStep.Complete, statusMessage = null)
+        }
+    }
+
     private fun prepareSong(song: SongSummary, autoPlay: Boolean) {
         val mediaItem = song.toMediaItem(appContext)
-        player.setMediaItem(mediaItem)
-        player.prepare()
-        player.playWhenReady = autoPlay
+        PlayerAdapters.setMediaItem(player, mediaItem)
+        PlayerAdapters.prepare(player)
+        PlayerAdapters.setPlayWhenReady(player, autoPlay)
         currentSongId = song.id
         userTitleOverride = song.title
         userArtistOverride = song.artist
         userAlbumOverride = song.album
         longformPrefs[song.id]?.defaultSpeed?.let { speed ->
-            val currentParameters = player.playbackParameters
+            val currentParameters = PlayerAdapters.getPlaybackParameters(player)
             if (kotlin.math.abs(currentParameters.speed - speed) >= PLAYBACK_SPEED_TOLERANCE) {
-                player.playbackParameters = PlaybackParameters(speed, currentParameters.pitch)
+                PlayerAdapters.setPlaybackSpeed(player, speed)
             }
         }
         updateState()
@@ -1779,13 +1808,13 @@ class PlayerViewModel(
     private fun syncPlayerTimelineFromQueue(startIndex: Int = currentSongIndex, play: Boolean) {
         val items = buildMediaItemsForQueue()
         if (items.isEmpty()) {
-            player.stop()
+            PlayerAdapters.stop(player)
             return
         }
         val idx = startIndex.coerceIn(0, items.lastIndex)
-        player.setMediaItems(items, idx, C.TIME_UNSET)
-        player.prepare()
-        player.playWhenReady = play
+        PlayerAdapters.setMediaItems(player, items, idx, C.TIME_UNSET)
+        PlayerAdapters.prepare(player)
+        PlayerAdapters.setPlayWhenReady(player, play)
         currentSongId = queueOrder.getOrNull(idx)
         recomputeQueueState(idx)
         persistPlaybackQueue()
@@ -1825,7 +1854,8 @@ class PlayerViewModel(
                     playlists = computePlaylists(sortSongs(allSongs, state.songSort)),
                     folders = SampleLibrary.folders,
                     genres = SampleLibrary.genres,
-                    longformItems = longformLibrary,
+                    audiobooks = longformLibrary.filter { it.category == LongformCategory.Audiobook },
+                    podcasts = longformLibrary.filter { it.category == LongformCategory.Podcast },
                     // Keep current videos (initially empty); a later scan populates from repository
                     videos = sortVideos(allVideos, state.videoSortDirection)
                 )
@@ -1886,7 +1916,10 @@ class PlayerViewModel(
         }
         longformLibrary = updatedLibrary
         _homeState.update { state ->
-            state.copy(longformItems = updatedLibrary)
+            state.copy(
+                audiobooks = updatedLibrary.filter { it.category == LongformCategory.Audiobook },
+                podcasts = updatedLibrary.filter { it.category == LongformCategory.Podcast }
+            )
         }
         _onboardingState.update { state ->
             state.copy(
@@ -2029,14 +2062,14 @@ class PlayerViewModel(
             while (true) {
                 updateState()
                 applyCrossfadeIfNeeded()
-                delay(if (player.playWhenReady && player.isPlaying) POSITION_UPDATE_INTERVAL_PLAYING_MS else POSITION_UPDATE_INTERVAL_PAUSED_MS)
+                delay(if (PlayerAdapters.getPlayWhenReady(player) && PlayerAdapters.isPlaying(player)) POSITION_UPDATE_INTERVAL_PLAYING_MS else POSITION_UPDATE_INTERVAL_PAUSED_MS)
             }
         }
     }
 
     private fun updateState() {
         _uiState.update { current ->
-            val metadata = player.mediaMetadata
+            val metadata = PlayerAdapters.getMediaMetadata(player)
             val baseTitle = metadata.title?.toString() ?: appContext.getString(R.string.sample_tone_title)
             val baseArtist = metadata.artist?.toString() ?: appContext.getString(R.string.sample_tone_artist)
             val baseAlbum = metadata.albumTitle?.toString() ?: appContext.getString(R.string.sample_album_title)
@@ -2050,10 +2083,10 @@ class PlayerViewModel(
                 title = title,
                 artist = artist,
                 album = album,
-                isPlaying = player.playWhenReady && player.playbackState == Player.STATE_READY,
-                durationMs = player.duration.takeIf { it > 0 } ?: 0L,
-                positionMs = player.currentPosition.coerceIn(0L, player.duration.takeIf { it > 0 } ?: 0L),
-                playbackSpeed = player.playbackParameters.speed,
+                isPlaying = PlayerAdapters.getPlayWhenReady(player) && PlayerAdapters.getPlaybackState(player) == Player.STATE_READY,
+                durationMs = PlayerAdapters.getDuration(player).takeIf { it > 0 } ?: 0L,
+                positionMs = PlayerAdapters.getCurrentPosition(player).coerceIn(0L, PlayerAdapters.getDuration(player).takeIf { it > 0 } ?: 0L),
+                playbackSpeed = PlayerAdapters.getPlaybackParameters(player).speed,
                 bookmarkPositionMs = bookmark
             )
         }
@@ -2077,20 +2110,20 @@ class PlayerViewModel(
             val remaining = (fadeInEnd - nowMs).coerceAtMost(ms)
             val progress = 1f - (remaining.toFloat() / ms)
             val vol = progress.coerceIn(0f, 1f)
-            try { player.volume = vol } catch (_: Throwable) {}
+            try { PlayerAdapters.setVolume(player, vol) } catch (_: Throwable) {}
             return
         }
 
         // Fade-out near end of the current item
-        val duration = player.duration
-        val position = player.currentPosition
+        val duration = PlayerAdapters.getDuration(player)
+        val position = PlayerAdapters.getCurrentPosition(player)
         if (duration > 0 && position >= 0) {
             val remaining = (duration - position).coerceAtLeast(0L)
             if (remaining in 0..ms) {
                 val vol = (remaining.toFloat() / ms).coerceIn(0f, 1f)
-                try { player.volume = vol } catch (_: Throwable) {}
-            } else if (player.volume < 1f) {
-                try { player.volume = 1f } catch (_: Throwable) {}
+                try { PlayerAdapters.setVolume(player, vol) } catch (_: Throwable) {}
+            } else if (PlayerAdapters.getVolume(player) < 1f) {
+                try { PlayerAdapters.setVolume(player, 1f) } catch (_: Throwable) {}
             }
         }
     }
@@ -2157,7 +2190,7 @@ class PlayerViewModel(
     }
 
     private fun ensureAudioEffects() {
-        val sessionId = (player as? ExoPlayer)?.audioSessionId ?: C.AUDIO_SESSION_ID_UNSET
+        val sessionId = (player as? ExoPlayer)?.let { PlayerAdapters.getAudioSessionId(it) } ?: C.AUDIO_SESSION_ID_UNSET
         if (sessionId == C.AUDIO_SESSION_ID_UNSET) {
             return
         }
@@ -2342,7 +2375,7 @@ class PlayerViewModel(
     private fun createInitialOnboardingState(): OnboardingUiState {
         val candidates = computeLongformCandidates(longformLibrary)
         return OnboardingUiState(
-            isVisible = false,
+            isVisible = false, // Start hidden, will be shown if onboarding is not complete
             step = OnboardingStep.Welcome,
             permissionState = PermissionStepState(totalItemCount = allSongs.size),
             longformState = LongformStepState(candidates = candidates)
@@ -2589,9 +2622,9 @@ class PlayerViewModel(
     private fun syncVideoTimeline(items: List<MediaItem>, startIndex: Int = 0, play: Boolean) {
         if (items.isEmpty()) return
         val idx = startIndex.coerceIn(0, items.lastIndex)
-        player.setMediaItems(items, idx, C.TIME_UNSET)
-        player.prepare()
-        player.playWhenReady = play
+        PlayerAdapters.setMediaItems(player, items, idx, C.TIME_UNSET)
+        PlayerAdapters.prepare(player)
+        PlayerAdapters.setPlayWhenReady(player, play)
         // Video flows do not integrate with song queue UI; clear queue view
         _homeState.update { it.copy(queue = QueueUiState()) }
     }
@@ -2615,7 +2648,8 @@ enum class HomeTab(@StringRes val titleRes: Int) {
     Albums(R.string.albums_tab),
     Artists(R.string.artists_tab),
     Genres(R.string.genres_tab),
-    Longform(R.string.longform_tab),
+    Audiobooks(R.string.audiobooks_tab),
+    Podcasts(R.string.podcasts_tab),
     Videos(R.string.videos_tab)
 }
 
@@ -2627,7 +2661,8 @@ data class HomeUiState(
     val albums: List<AlbumSummary> = emptyList(),
     val artists: List<ArtistSummary> = emptyList(),
     val genres: List<GenreSummary> = emptyList(),
-    val longformItems: List<LongformItem> = emptyList(),
+    val audiobooks: List<LongformItem> = emptyList(),
+    val podcasts: List<LongformItem> = emptyList(),
     val longformFilter: LongformFilter = LongformFilter.All,
     val videos: List<VideoSummary> = emptyList(),
     val videoSortDirection: SortDirection = SortDirection.Ascending,
@@ -2648,10 +2683,10 @@ data class HomeUiState(
 ) {
     val filteredLongformItems: List<LongformItem>
         get() = when (longformFilter) {
-            LongformFilter.All -> longformItems
-            LongformFilter.Podcasts -> longformItems.filter { it.category == LongformCategory.Podcast }
-            LongformFilter.Audiobooks -> longformItems.filter { it.category == LongformCategory.Audiobook }
-            LongformFilter.Unassigned -> longformItems.filter { it.category == LongformCategory.Unassigned }
+            LongformFilter.All -> audiobooks + podcasts
+            LongformFilter.Podcasts -> podcasts
+            LongformFilter.Audiobooks -> audiobooks
+            LongformFilter.Unassigned -> emptyList() // No longer needed with separate tabs
         }
 }
 

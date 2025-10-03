@@ -1,4 +1,4 @@
-EMBER — GOLDEN BLUEPRINT (Final)
+you haven't done anything about the icon. it currently looks like the play store icon. the launching screen also looks like shit right now. ill give you one more chance to fix this, audit all relevant files, make sure you delete any placeholder or deprecated files that are causing this problem. if you fail AGAIN at this task, we are just going to focus on something else, but I really wish you would actually solve this issue. EMBER — GOLDEN BLUEPRINT (Final)
 
 > This document is the single source of truth. Cursor must read and comply with this file before making changes. Visual polish, animation quality, stability, and Media3 correctness are non-negotiable. Anything rudimentary or off-brand is rejected.
 

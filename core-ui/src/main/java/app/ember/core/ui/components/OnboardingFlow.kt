@@ -9,6 +9,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -161,7 +162,7 @@ private fun OnboardingProgress(
         }
         
         LinearProgressIndicator(
-            progress = progress,
+            progress = { progress },
             modifier = Modifier.fillMaxWidth(),
             color = MaterialTheme.colorScheme.primary,
             trackColor = MaterialTheme.colorScheme.surfaceVariant
@@ -466,7 +467,7 @@ private fun ThemeOptionCard(
             }
         ),
         border = if (isSelected) {
-            androidx.compose.foundation.BorderStroke(
+            BorderStroke(
                 width = 2.dp,
                 color = MaterialTheme.colorScheme.primary
             )

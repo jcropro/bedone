@@ -1,4 +1,15 @@
 <resources>
+    <string name="theme_ember">Ember</string>
+    <string name="theme_classic">Classic</string>
+    <string name="theme_minimal">Minimal</string>
+    <string name="theme_ocean">Ocean</string>
+    <string name="theme_forest">Forest</string>
+    <string name="theme_sunset">Sunset</string>
+    <string name="theme_lavender">Lavender</string>
+    <string name="theme_midnight">Midnight</string>
+    <string name="theme_coral">Coral</string>
+    <string name="theme_aurora">Aurora</string>
+    <string name="theme_rose_gold">Rose Gold</string>
     <string name="theme_option_ember">Ember Classic</string>
     <string name="theme_option_night">Night Copper</string>
     <string name="theme_option_graphite">Mono Graphite</string>

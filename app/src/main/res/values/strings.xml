@@ -1,6 +1,28 @@
 <resources>
     <string name="app_name">EmberAudioPlayer3</string>
     <string name="app_tagline">Your audio player.</string>
+    <string name="splash_tagline">Your Audio Player</string>
+    
+    <!-- Library Tab Names -->
+    <string name="tab_songs">Songs</string>
+    <string name="tab_playlists">Playlists</string>
+    <string name="tab_folders">Folders</string>
+    <string name="tab_albums">Albums</string>
+    <string name="tab_artists">Artists</string>
+    <string name="tab_genres">Genres</string>
+    <string name="tab_audiobooks">Audiobooks</string>
+    <string name="tab_podcasts">Podcasts</string>
+    <string name="tab_videos">Videos</string>
+    
+    <!-- Widget Descriptions -->
+    <string name="widget_flame_minimal_description">Flame Minimal - Clean track info with play/pause</string>
+    <string name="widget_flame_card_description">Flame Card - Full featured widget with controls</string>
+    <string name="widget_vinyl_description">Vinyl - Retro circular design with track info</string>
+    <string name="widget_circular_description">Circular - Minimal circular play button</string>
+    <string name="widget_full_art_description">Full Art - Large artwork with complete controls</string>
+    
+    <string name="notification_channel_playback">Playback</string>
+    <string name="notification_title_playback">Playback</string>
 
     <string name="onboarding_brand_title">Ember</string>
     <string name="onboarding_brand_subtitle">Your audio player</string>
@@ -35,11 +57,29 @@
     <string name="onboarding_long_audio_undo_message">Sorting reverted.</string>
     <string name="onboarding_undo">Undo</string>
     <string name="onboarding_theme_title">Pick a look</string>
+    <string name="onboarding_theme_subtitle">Choose how Ember looks and feels</string>
     <string name="onboarding_theme_hint">More customization anytime in Theme Studio.</string>
     <string name="onboarding_theme_dark_toggle">Use dark theme</string>
     <string name="onboarding_theme_preview_light">Light mode preview</string>
     <string name="onboarding_theme_preview_dark">Dark mode preview</string>
+    <string name="onboarding_theme_use_this_look">Use this look</string>
+    <string name="onboarding_theme_advanced">Advanced</string>
     <string name="onboarding_finish">Finish</string>
+    
+    <!-- Common UI strings -->
+    <string name="back_button_desc">Back</string>
+    <string name="close_button_desc">Close</string>
+    <string name="done">Done</string>
+    
+    <!-- Advanced theme settings -->
+    <string name="advanced_theme_settings">Advanced Theme Settings</string>
+    <string name="use_dark_theme">Use dark theme</string>
+    <string name="use_true_black">Use true black</string>
+    <string name="use_dynamic_color">Use dynamic color</string>
+    <string name="accent_color_variant">Accent color variant</string>
+    <string name="blur_intensity">Blur intensity</string>
+    <string name="reduced_motion">Reduced motion</string>
+    <string name="color_safe_mode">Color safe mode</string>
 
     <string name="play_action">Play</string>
     <string name="pause_action">Pause</string>
@@ -73,7 +113,8 @@
     <string name="albums_tab">Albums</string>
     <string name="artists_tab">Artists</string>
     <string name="genres_tab">Genres</string>
-    <string name="longform_tab">Longform</string>
+    <string name="audiobooks_tab">Audiobooks</string>
+    <string name="podcasts_tab">Podcasts</string>
     <string name="videos_tab">Videos</string>
     <string name="equalizer_tab">Equalizer</string>
     <string name="lyrics_tab">Lyrics</string>
@@ -241,6 +282,27 @@
     <string name="sleep_timer_message_completed_stop_after_queue">Sleep timer will stop after the queue finishes.</string>
     <string name="sleep_timer_message_cancelled">Sleep timer cancelled.</string>
     <string name="placeholder_widgets">Widget gallery is under construction.</string>
+    <string name="widget_description">Ember Audio Player Widget</string>
+    <string name="widget_gallery_title">Widget Gallery</string>
+    <string name="widget_gallery_subtitle">Choose a widget to add to your home screen</string>
+    <string name="widget_small_title">Small Widget</string>
+    <string name="widget_small_description">Track info + play/pause (1×2)</string>
+    <string name="widget_medium_title">Medium Widget</string>
+    <string name="widget_medium_description">Track info + controls + next (2×2)</string>
+    <string name="widget_large_title">Large Widget</string>
+    <string name="widget_large_description">Full controls + EQ shortcut (4×2)</string>
+    <string name="widget_add_to_home">Tap to add to home screen</string>
+    <string name="widget_configure_title">Customize Widget</string>
+    <string name="widget_style_title">Widget Style</string>
+    <string name="widget_style_rounded">Rounded</string>
+    <string name="widget_style_rounded_desc">Classic rounded corners with shadows</string>
+    <string name="widget_style_compact">Compact</string>
+    <string name="widget_style_compact_desc">Minimal design with tight spacing</string>
+    <string name="widget_style_glass">Glass</string>
+    <string name="widget_style_glass_desc">Glass morphism with blur effects</string>
+    <string name="widget_options_title">Options</string>
+    <string name="widget_show_eq_title">Show Equalizer Shortcut</string>
+    <string name="widget_show_eq_desc">Add quick access to equalizer controls</string>
     <string name="placeholder_scan_import">Scanning and import tools will land with the library engine.</string>
     <string name="placeholder_settings">Settings are coming in a later slice.</string>
     <string name="settings_rearm_on_boot_title">Re‑arm sleep timer on reboot</string>
