@@ -17,6 +17,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -104,6 +107,7 @@ fun SongsTopBar(
     Column(modifier = modifier) {
         // Main Top App Bar
         CenterAlignedTopAppBar(
+            modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars),
             title = {
                 if (isMultiSelectMode) {
                     Text(
@@ -217,9 +221,11 @@ private fun IntegratedScrollableTabs(
     
     LazyRow(
         state = listState,
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(24.dp),
-        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 16.dp)
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 6.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 8.dp)
     ) {
         items(LibraryTab.values()) { tab ->
             TabItem(
